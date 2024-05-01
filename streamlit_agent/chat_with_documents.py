@@ -103,12 +103,11 @@ try:
 
     class PrintRetrievalHandler(BaseCallbackHandler):
         def __init__(self, container):
-            self.status = container.status("**Wait you curious human**")
+            self.status = container.status("**Context Retrieval**")
 
         def on_retriever_start(self, serialized: dict, query: str, **kwargs):
             self.status.write(f"**Question:** {query}")
-            self.status.update(label=f"**Wait curious carbon entity am retrieving context:** {query}")
-
+            self.status.update(label=f"**Context Retrieval:** {query}")
         def on_retriever_end(self, documents, **kwargs):
             for idx, doc in enumerate(documents):
                 source = os.path.basename(doc.metadata["source"])
@@ -156,7 +155,7 @@ try:
 
     if len(msgs.messages) == 0 or st.sidebar.button("Clear message history"):
         msgs.clear()
-        msgs.add_ai_message("Want to query your documents? ask me!")
+        msgs.add_ai_message("Hey carbon entity, Want to query your documents? ask me!")
 
     avatars = {"human": "user", "ai": "assistant"}
     for msg in msgs.messages:
