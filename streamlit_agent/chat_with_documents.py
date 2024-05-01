@@ -1,4 +1,5 @@
 import os
+import loadmap
 import tempfile
 import streamlit as st
 from langchain.chat_models import ChatOpenAI
@@ -11,21 +12,21 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.vectorstores import DocArrayInMemorySearch
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-st.set_page_config(page_title="Ask 42", page_icon="👽")
-st.title("👽Ask 42")
+st.set_page_config(page_title="Ask Fortytwo", page_icon="👽")
+st.title("👽Ask Fortytwo")
 
 
 @st.cache_resource(ttl="1h")
 def configure_retriever(uploaded_files):
     # Read documents
-    docs = []
     temp_dir = tempfile.TemporaryDirectory()
     for file in uploaded_files:
         temp_filepath = os.path.join(temp_dir.name, file.name)
         with open(temp_filepath, "wb") as f:
             f.write(file.getvalue())
-        loader = PyPDFLoader(temp_filepath)
-        docs.extend(loader.load())
+        
+        docs = loadmap.load_multiple_documents(temp_filepath) #load multiple formats
+        
 
     # Split documents
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=200)
@@ -65,7 +66,7 @@ class PrintRetrievalHandler(BaseCallbackHandler):
 
     def on_retriever_start(self, serialized: dict, query: str, **kwargs):
         self.status.write(f"**Question:** {query}")
-        self.status.update(label=f"**Context Retrieval:** {query}")
+        self.status.update(label=f"**wait you curious human:** {query}")
 
     def on_retriever_end(self, documents, **kwargs):
         for idx, doc in enumerate(documents):
@@ -81,10 +82,10 @@ if not openai_api_key:
     st.stop()
 
 uploaded_files = st.sidebar.file_uploader(
-    label="Upload PDF files", type=["pdf"], accept_multiple_files=True
+    label="Upload files", type=["pdf","txt","docx","csv"], accept_multiple_files=True
 )
 if not uploaded_files:
-    st.info("Please upload PDF documents to continue.")
+    st.info("Please upload documents to continue.")
     st.stop()
 
 retriever = configure_retriever(uploaded_files)
