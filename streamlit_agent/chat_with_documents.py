@@ -128,7 +128,7 @@ try:
     if chat_query:
         llm_ch = chat.chat(openai_key=openai_api_key)
         response = llm_ch.invoke(chat_query)
-        st.write(response['text'])
+        st.write("response: ",response['text'])
     
 
 
