@@ -128,7 +128,7 @@ try:
     if chat_query := st.text_input("Chat with 42, enter query : "):
         response = chat.chat(openai_key=openai_api_key,query=chat_query)
         chat_history.append(response)
-        st.write("response: ",response['text'])
+        st.write("response: ",response)
         
 
     uploaded_files = st.sidebar.file_uploader(
