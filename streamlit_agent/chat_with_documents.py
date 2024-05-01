@@ -107,7 +107,7 @@ try:
 
         def on_retriever_start(self, serialized: dict, query: str, **kwargs):
             self.status.write(f"**Question:** {query}")
-            self.status.update(label=f"**Retrieving context:** {query}")
+            self.status.update(label=f"**Wait curious carbon entity am retrieving context:** {query}")
 
         def on_retriever_end(self, documents, **kwargs):
             for idx, doc in enumerate(documents):
