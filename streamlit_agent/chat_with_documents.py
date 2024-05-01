@@ -124,8 +124,8 @@ if not openai_api_key:
 #add chat part
 maximum = 20
 start = 0
+chat_query = st.text_input("Chat with 42, enter query : ")
 while start<maximum:
-    chat_query = st.text_input("Chat with 42, enter query : ")
     if chat_query:
         llm_ch = chat.chat(openai_key=openai_api_key)
         response = llm_ch.invoke(chat_query)
