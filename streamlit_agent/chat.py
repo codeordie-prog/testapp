@@ -2,6 +2,8 @@ from langchain.chains import LLMChain
 from langchain.memory import ConversationBufferMemory
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import OpenAI
+from langchain_openai import OpenAI
+from langchain.chains import ConversationChain
 
 
 def chat(openai_key:str):
@@ -15,14 +17,18 @@ def chat(openai_key:str):
     prompt = PromptTemplate(
         input_variables=["chat_history", "human_input"], template=template
     )
-    memory = ConversationBufferMemory(memory_key="chat_history",output_key="output_key",return_messages=True)
+    memory = ConversationBufferMemory(memory_key="chat_history",return_messages=True)
 
     llm_chat = OpenAI(api_key=openai_key)
-    llm_chain = LLMChain(
-        llm=llm_chat,
-        prompt=prompt,
-        verbose=True,
-        memory=memory,
-    )
 
-    return llm_chain
+
+    llm = OpenAI(temperature=0)
+
+    conversation = ConversationChain(
+    llm=llm,
+    prompt = prompt,
+    verbose=True,
+    memory=ConversationBufferMemory()
+)
+
+    return conversation
