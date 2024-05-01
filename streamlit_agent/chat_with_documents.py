@@ -51,7 +51,7 @@ def configure_retriever(uploaded_files):
     vectordb = DocArrayInMemorySearch.from_documents(splits, embeddings)
 
     # Define retriever
-    retriever = vectordb.as_retriever(search_type="mmr", search_kwargs={"k": 2, "fetch_k": 4})
+    retriever = vectordb.as_retriever()
 
     return retriever
 
