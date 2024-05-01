@@ -13,7 +13,7 @@ def chat(openai_key:str):
 
     {chat_history}
     Human: {human_input}
-    42:"""
+    Assistant:"""
 
     prompt = PromptTemplate(
         input_variables=["chat_history", "human_input"], template=template
