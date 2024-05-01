@@ -129,7 +129,7 @@ chat_query = st.text_input("Chat with 42, enter query : ")
 if chat_query:
     llm_ch = chat.chat(openai_key=openai_api_key)
     response = llm_ch.invoke(chat_query)
-    st.write(response)
+    st.write(response['text'])
 
 retriever = configure_retriever(uploaded_files)
 
