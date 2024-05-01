@@ -13,7 +13,7 @@ def chat(openai_key:str):
     [
         SystemMessage(
             content=(
-                "You are a helpful assistant called 42. anser all queries accurately "
+                "You are a smart assistant called 42. answer all queries accurately "
                 
             )
         ),
@@ -23,7 +23,7 @@ def chat(openai_key:str):
 
 
     prompt = PromptTemplate(
-        input_variables=["chat_history", "human_input"], template=template
+       template=template
     )
     memory = ConversationBufferMemory(memory_key="chat_history")
 
