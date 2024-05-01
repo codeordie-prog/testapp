@@ -26,7 +26,7 @@ is an advanced question-answering platform that allows users to upload documents
 - add your secret openAI API key on the top left slider.
 - for a basic chat without document query, use the chat_with_42 query entry
          
-- for document query, upload a Document: You can upload any document in `.pdf`,'.txt', or '.csv' format.
+- for document query, upload a Document: You can upload any document in `.pdf`,`.txt`, or `.csv` format.
 - you can also upload multiple documents and query them all together.
 - Ask a Question: After uploading the document, type in your question related to the document's content.
 - Get Answers: AI analyzes the document and provides answers based on the information contained in it.
@@ -122,11 +122,15 @@ if not openai_api_key:
     st.stop()
 
 #add chat part
-chat_query = st.text_input("Chat with 42, enter query : ")
-if chat_query:
-    llm_ch = chat.chat(openai_key=openai_api_key)
-    response = llm_ch.invoke(chat_query)
-    st.write(response['text'])
+maximum = 20
+start = 0
+while(start<maximum):
+    chat_query = st.text_input("Chat with 42, enter query : ")
+    if chat_query:
+        llm_ch = chat.chat(openai_key=openai_api_key)
+        response = llm_ch.invoke(chat_query)
+        st.write(response['text'])
+        start+=1
 
 
 uploaded_files = st.sidebar.file_uploader(
