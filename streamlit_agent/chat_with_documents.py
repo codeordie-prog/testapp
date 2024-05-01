@@ -1,6 +1,7 @@
 import os
 import tempfile
 import streamlit as st
+import basic_streaming
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader
 from langchain.memory import ConversationBufferMemory
@@ -160,4 +161,6 @@ if user_query := st.chat_input(placeholder="Ask me about  your documents!"):
         retrieval_handler = PrintRetrievalHandler(st.container())
         stream_handler = StreamHandler(st.empty())
         response = qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+
+
 
