@@ -1,7 +1,6 @@
 import os
 import tempfile
 import streamlit as st
-import basic_streaming
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader
 from langchain.memory import ConversationBufferMemory
