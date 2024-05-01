@@ -2,7 +2,7 @@ import os
 import tempfile
 import streamlit as st
 from langchain.chat_models import ChatOpenAI
-from langchain.document_loaders import PyPDFLoader,TextLoader
+from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader,Docx2txtLoader
 from langchain.memory import ConversationBufferMemory
 from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 from langchain.embeddings import HuggingFaceEmbeddings
@@ -25,12 +25,22 @@ def configure_retriever(uploaded_files):
         st.write(temp_filepath)
         with open(temp_filepath, "wb") as f:
             f.write(file.getvalue())
+
+        #load pdf,txt and csv
         if temp_filepath.endswith(".pdf"):
             loader = PyPDFLoader(temp_filepath)
-            docs.extend(loader.load())\
+            docs.extend(loader.load())
             
         elif temp_filepath.endswith(".txt"):
             loader = TextLoader(temp_filepath)
+            docs.extend(loader.load())
+        
+        elif temp_filepath.endswith(".csv"):
+            loader = CSVLoader(temp_filepath)
+            docs.extend(loader.load())
+
+        elif temp_filepath.endswith(".docx"):
+            loader = Docx2txtLoader(temp_filepath)
             docs.extend(loader.load())
         
         
@@ -69,11 +79,11 @@ class StreamHandler(BaseCallbackHandler):
 
 class PrintRetrievalHandler(BaseCallbackHandler):
     def __init__(self, container):
-        self.status = container.status("**Context Retrieval**")
+        self.status = container.status("**Wait you curious human**")
 
     def on_retriever_start(self, serialized: dict, query: str, **kwargs):
         self.status.write(f"**Question:** {query}")
-        self.status.update(label=f"**wait you curious human:** {query}")
+        self.status.update(label=f"**Retrieving context:** {query}")
 
     def on_retriever_end(self, documents, **kwargs):
         for idx, doc in enumerate(documents):
@@ -89,7 +99,7 @@ if not openai_api_key:
     st.stop()
 
 uploaded_files = st.sidebar.file_uploader(
-    label="Upload files", type=["pdf","txt","docx","csv"], accept_multiple_files=True
+    label="Upload files", type=["pdf","txt","csv","docx"], accept_multiple_files=True
 )
 if not uploaded_files:
     st.info("Please upload documents to continue.")
