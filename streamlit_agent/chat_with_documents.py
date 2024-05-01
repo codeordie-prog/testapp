@@ -13,8 +13,8 @@ from langchain.vectorstores import DocArrayInMemorySearch
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
 st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
-st.title("<span style='color:gray'>👽 Ask Fortytwo</span>", unsafe_allow_html=True)
-st.markdown("<span style='color:gray'>*Unlocking the mysteries of the universe, one question at a time*</span>", unsafe_allow_html=True)
+st.title("👽 Ask Fortytwo")
+st.markdown("*Unlocking the mysteries of the universe, one question at a time*")
 
 # Explanation of the App
 st.header('About the App')
