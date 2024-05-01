@@ -28,7 +28,7 @@ def chat(openai_key:str):
     llm=llm,
     prompt = prompt,
     verbose=True,
-    memory=ConversationBufferMemory()
+    memory=memory
 )
 
     return conversation
