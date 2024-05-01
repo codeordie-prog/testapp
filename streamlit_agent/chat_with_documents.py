@@ -2,7 +2,7 @@ import os
 import tempfile
 import streamlit as st
 from langchain.chat_models import ChatOpenAI
-from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader,UnstructuredWordDocumentLoader
+from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader
 from langchain.memory import ConversationBufferMemory
 from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 from langchain.embeddings import HuggingFaceEmbeddings
@@ -39,10 +39,7 @@ def configure_retriever(uploaded_files):
             loader = CSVLoader(temp_filepath)
             docs.extend(loader.load())
 
-        elif temp_filepath.endswith(".docx"):
-            loader = UnstructuredWordDocumentLoader(temp_filepath)
-            docs.extend(loader.load())
-        
+    
         
 
     # Split documents
@@ -99,7 +96,7 @@ if not openai_api_key:
     st.stop()
 
 uploaded_files = st.sidebar.file_uploader(
-    label="Upload files", type=["pdf","txt","csv","docx"], accept_multiple_files=True
+    label="Upload files", type=["pdf","txt","csv"], accept_multiple_files=True
 )
 if not uploaded_files:
     st.info("Please upload documents to continue.")
