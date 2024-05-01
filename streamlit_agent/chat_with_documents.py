@@ -123,14 +123,12 @@ if not openai_api_key:
     st.stop()
 
 #add chat part
-maximum = 20
-start = 0
 chat_query = st.text_input("Chat with 42, enter query : ")
 if chat_query:
     llm_ch = chat.chat(openai_key=openai_api_key)
     response = llm_ch.invoke(chat_query)
     st.write(response['text'])
-    start+=1
+   
 
 
 uploaded_files = st.sidebar.file_uploader(
