@@ -15,7 +15,7 @@ def chat(openai_key:str):
     prompt = PromptTemplate(
         input_variables=["chat_history", "human_input"], template=template
     )
-    memory = ConversationBufferMemory(memory_key="chat_history",output_key="output",return_messages=True)
+    memory = ConversationBufferMemory(memory_key="chat_history",output_key="output_key",return_messages=True)
 
     llm_chat = OpenAI(api_key=openai_key)
     llm_chain = LLMChain(
