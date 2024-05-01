@@ -126,7 +126,7 @@ try:
     chat_history = []
 
     if chat_query := st.text_input("Chat with 42, enter query : "):
-        response = chat.chat(openai_key=openai_api_key,chat_history=chat_history,query=chat_query)
+        response = chat.chat(openai_key=openai_api_key,query=chat_query)
         chat_history.append(response)
         st.write("response: ",response['text'])
         
