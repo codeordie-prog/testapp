@@ -123,12 +123,10 @@ try:
         st.stop()
 
 
-    chat_history = []
-
     if chat_query := st.text_input("Chat with 42, enter query : "):
-        response = chat.chat(openai_key=openai_api_key,query=chat_query)
-        chat_history.append(response)
-        st.write("response: ",response)
+        response_chain = chat.chat(openai_key=openai_api_key)
+        response = response_chain.invoke(chat_query)
+        st.write("response: ",response['text'])
         
 
     uploaded_files = st.sidebar.file_uploader(

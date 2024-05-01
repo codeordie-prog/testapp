@@ -8,7 +8,7 @@ from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 
 
-def chat(openai_key:str, query:str):
+def chat(openai_key:str):
     
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -37,7 +37,5 @@ def chat(openai_key:str, query:str):
     prompt=prompt,
     verbose=False,
     memory=memory,
-)
-
-    response = llm_chain.invoke(query)
-    return response['text'] 
+    )
+    return llm_chain
