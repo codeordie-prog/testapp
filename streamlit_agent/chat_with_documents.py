@@ -1,9 +1,8 @@
 import os
-import loadmap
 import tempfile
 import streamlit as st
 from langchain.chat_models import ChatOpenAI
-from langchain.document_loaders import PyPDFLoader
+from langchain.document_loaders import PyPDFLoader,TextLoader,CSVloader
 from langchain.memory import ConversationBufferMemory
 from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 from langchain.embeddings import HuggingFaceEmbeddings
@@ -19,13 +18,16 @@ st.title("👽Ask Fortytwo")
 @st.cache_resource(ttl="1h")
 def configure_retriever(uploaded_files):
     # Read documents
+    docs = []
     temp_dir = tempfile.TemporaryDirectory()
     for file in uploaded_files:
         temp_filepath = os.path.join(temp_dir.name, file.name)
+        st.write(temp_filepath)
         with open(temp_filepath, "wb") as f:
             f.write(file.getvalue())
+        loader = PyPDFLoader(temp_filepath)
+        docs.extend(loader.load())
         
-        docs = loadmap.load_multiple_documents(temp_filepath) #load multiple formats
         
 
     # Split documents
