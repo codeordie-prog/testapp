@@ -122,12 +122,17 @@ try:
         st.info("Please add your OpenAI API key to continue.")
         st.stop()
 
-    #add chat part
-    chat_query = st.text_input("Chat with 42, enter query : ")
-    if chat_query:
-        llm_ch = chat.chat(openai_key=openai_api_key)
-        response = llm_ch.invoke(chat_query)
-        st.write("response: ",response['text'])
+    interaction_count = 0
+
+    if chat_query := st.text_input("Chat with 42, enter query : "):
+        interaction_count += 1
+        if interaction_count > 20:
+            st.write("Maximum of 20 interactions reached. Please reset the conversation.")
+            st.stop()
+
+    llm_ch = chat.chat(openai_key=openai_api_key)
+    response = llm_ch.invoke(chat_query)
+    st.write("response: ",response['text'])
     
 
 
