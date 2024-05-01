@@ -19,8 +19,9 @@ st.markdown("*Unlocking the mysteries of the universe, one question at a time*")
 # Explanation of the App
 st.header('About the App')
 st.write("""
-42, named after the answer to the ultimate question of life, 
-is an advanced question-answering platform that allows users to upload documents in the formats (pdf,txt and csv) and receive answers to their queries based on the content of these documents. Utilizing RAG approach powered by OpenAI's GPT models, the app provides insightful and contextually relevant answers.
+42, named after the answer to the ultimate question of life, is an advanced question-answering platform that allows users to upload documents in the formats (pdf,txt and csv) and receive answers to
+their queries based on the content of these documents. 
+Utilizing RAG approach powered by OpenAI's GPT models, the app provides insightful and contextually relevant answers.
 
 ### How It Works
 - add your secret openAI API key on the top left slider.
