@@ -112,16 +112,10 @@ class PrintRetrievalHandler(BaseCallbackHandler):
         self.status.update(state="complete")
 
 
+
 openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 if not openai_api_key:
     st.info("Please add your OpenAI API key to continue.")
-    st.stop()
-
-uploaded_files = st.sidebar.file_uploader(
-    label="Upload files", type=["pdf","txt","csv"], accept_multiple_files=True
-)
-if not uploaded_files:
-    st.info("Please upload documents to continue.")
     st.stop()
 
 #add chat part
@@ -130,6 +124,15 @@ if chat_query:
     llm_ch = chat.chat(openai_key=openai_api_key)
     response = llm_ch.invoke(chat_query)
     st.write(response['text'])
+
+
+uploaded_files = st.sidebar.file_uploader(
+    label="Upload files", type=["pdf","txt","csv"], accept_multiple_files=True
+)
+if not uploaded_files:
+    st.info("Please upload documents to continue.")
+    st.stop()
+
 
 retriever = configure_retriever(uploaded_files)
 
