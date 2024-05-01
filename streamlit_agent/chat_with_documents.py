@@ -12,8 +12,9 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.vectorstores import DocArrayInMemorySearch
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-st.set_page_config(page_title="Ask Fortytwo", page_icon="👽",layout="centered")
-st.title("👽Ask Fortytwo ")
+st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
+st.title("<span style='color:gray'>👽 Ask Fortytwo</span>", unsafe_allow_html=True)
+st.markdown("<span style='color:gray'>*Unlocking the mysteries of the universe, one question at a time*</span>", unsafe_allow_html=True)
 
 # Explanation of the App
 st.header('About the App')
@@ -23,7 +24,9 @@ is an advanced question-answering platform that allows users to upload documents
 
 ### How It Works
 - add your secret openAI API key on the top left slider.
-- Upload a Document: You can upload any document in `.pdf`,'.txt', or '.csv' format.
+- for a basic chat without document query, use the chat_with_42 query entry
+         
+- for document query, upload a Document: You can upload any document in `.pdf`,'.txt', or '.csv' format.
 - you can also upload multiple documents and query them all together.
 - Ask a Question: After uploading the document, type in your question related to the document's content.
 - Get Answers: AI analyzes the document and provides answers based on the information contained in it.
