@@ -8,7 +8,7 @@ from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 
 
-def chat(openai_key:str, chat_history:list):
+def chat(openai_key:str, chat_history:list, query:str):
     
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -39,4 +39,6 @@ def chat(openai_key:str, chat_history:list):
     memory=memory,
 )
 
-    return llm_chain
+    response = llm_chain.invoke(query)
+    chat_history.append(response)
+    return response['text'] 

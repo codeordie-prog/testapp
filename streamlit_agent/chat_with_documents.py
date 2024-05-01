@@ -123,17 +123,13 @@ try:
         st.stop()
 
 
-    def chat_session(chat_history = []):
+    chat_history = []
 
-        if chat_query := st.text_input("Chat with 42, enter query : "):
-            llm_ch = chat.chat(openai_key=openai_api_key,chat_history=chat_history)
-            response = llm_ch.invoke(chat_query)
-            chat_history.append(response)
-            st.write("response: ",response['text'])
-            chat_session(chat_history=chat_history)
-    
-    chat_session(20)
-
+    if chat_query := st.text_input("Chat with 42, enter query : "):
+        response = chat.chat(openai_key=openai_api_key,chat_history=chat_history,query=chat_query)
+        chat_history.append(response)
+        st.write("response: ",response['text'])
+        
 
     uploaded_files = st.sidebar.file_uploader(
         label="Upload files", type=["pdf","txt","csv"], accept_multiple_files=True
