@@ -130,8 +130,10 @@ try:
             st.write("Maximum of 20 interactions reached. Please reset the conversation.")
             st.stop()
 
+    chat_history = []
     llm_ch = chat.chat(openai_key=openai_api_key)
     response = llm_ch.invoke(chat_query)
+    chat_history.append(response)
     st.write("response: ",response['text'])
     
 

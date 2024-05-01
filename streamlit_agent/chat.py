@@ -8,7 +8,7 @@ from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 
 
-def chat(openai_key:str):
+def chat(openai_key:str, chat_history:list):
     
     prompt = ChatPromptTemplate.from_messages(
         [
@@ -19,7 +19,7 @@ def chat(openai_key:str):
                 """
             ),  # The persistent system prompt
             MessagesPlaceholder(
-                variable_name="chat_history"
+                variable_name=chat_history
             ),  # Where the memory will be stored.
             HumanMessagePromptTemplate.from_template(
                 "{human_input}"
