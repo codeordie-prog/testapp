@@ -127,7 +127,8 @@ if not uploaded_files:
 #add chat part
 chat_query = st.text_input("Chat with 42, enter query : ")
 if chat_query:
-    response = chat.llm_chain.invoke(chat_query)
+    llm_ch = chat.chat(openai_key=openai_api_key)
+    response = llm_ch.invoke(chat_query)
     st.write(response)
 
 retriever = configure_retriever(uploaded_files)
