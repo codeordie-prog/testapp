@@ -40,5 +40,4 @@ def chat(openai_key:str, chat_history:list, query:str):
 )
 
     response = llm_chain.invoke(query)
-    chat_history.append(response)
     return response['text'] 
