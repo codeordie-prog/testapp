@@ -171,4 +171,4 @@ try:
 
 
 except Exception as e:
-    st.write("an error occured check the key")
+    st.write("an error occured check the key",e)
