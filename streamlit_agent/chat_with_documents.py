@@ -2,7 +2,7 @@ import os
 import tempfile
 import streamlit as st
 from langchain.chat_models import ChatOpenAI
-from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader,Docx2txtLoader
+from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader,UnstructuredWordDocumentLoader
 from langchain.memory import ConversationBufferMemory
 from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 from langchain.embeddings import HuggingFaceEmbeddings
@@ -40,7 +40,7 @@ def configure_retriever(uploaded_files):
             docs.extend(loader.load())
 
         elif temp_filepath.endswith(".docx"):
-            loader = Docx2txtLoader(temp_filepath)
+            loader = UnstructuredWordDocumentLoader(temp_filepath)
             docs.extend(loader.load())
         
         
