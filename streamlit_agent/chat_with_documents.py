@@ -131,7 +131,7 @@ try:
             st.stop()
 
         chat_history = []
-        llm_ch = chat.chat(openai_key=openai_api_key)
+        llm_ch = chat.chat(openai_key=openai_api_key,chat_history=chat_history)
         response = llm_ch.invoke(chat_query)
         chat_history.append(response)
         st.write("response: ",response['text'])
