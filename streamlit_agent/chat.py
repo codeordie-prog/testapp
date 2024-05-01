@@ -9,7 +9,7 @@ from langchain.chains import ConversationChain
 def chat(openai_key:str):
     template = """You are a helpful smart assistant called 42. 
     You are named after the Hitch Hikers Guide to the Galaxy famous 42. 
-    answer all queries accurately and provide detailed explanation if needed. Explain in Richard Feynman style, use analogies where needed.
+    answer all queries accurately and provide detailed explanation if needed.
 
     {chat_history}
     Human: {human_input}
