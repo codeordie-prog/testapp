@@ -22,7 +22,7 @@ is an advanced question-answering platform that allows users to upload documents
 
 ### How It Works
 - add your secret openAI API key on the top left slider.
-- Upload a Document: You can upload any document in `.pdf`,'txt', or 'csv' format.
+- Upload a Document: You can upload any document in `.pdf`,'.txt', or '.csv' format.
 - you can also upload multiple documents and query them all together.
 - Ask a Question: After uploading the document, type in your question related to the document's content.
 - Get Answers: AI analyzes the document and provides answers based on the information contained in it.
@@ -32,6 +32,15 @@ is an advanced question-answering platform that allows users to upload documents
 
 ### Get Started
 Simply upload your document and start asking questions!
+""")
+
+# Instructions for getting an OpenAI API key
+st.subheader("Get an OpenAI API key")
+st.write("You can get your own OpenAI API key by following the instructions:")
+st.write("""
+1. Go to [OpenAI API Keys](https://platform.openai.com/account/api-keys).
+2. Click on the `+ Create new secret key` button.
+3. Next, enter an identifier name (optional) and click on the `Create secret key` button.
 """)
 
 
@@ -152,11 +161,3 @@ if user_query := st.chat_input(placeholder="Ask me about  your documents!"):
         stream_handler = StreamHandler(st.empty())
         response = qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
 
-# Instructions for getting an OpenAI API key
-st.subheader("Get an OpenAI API key")
-st.write("You can get your own OpenAI API key by following the instructions:")
-st.write("""
-1. Go to [OpenAI API Keys](https://platform.openai.com/account/api-keys).
-2. Click on the `+ Create new secret key` button.
-3. Next, enter an identifier name (optional) and click on the `Create secret key` button.
-""")
