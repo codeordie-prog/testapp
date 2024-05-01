@@ -1,5 +1,6 @@
 import os
 import tempfile
+import chat
 import streamlit as st
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader
@@ -34,14 +35,6 @@ is an advanced question-answering platform that allows users to upload documents
 Simply upload your document and start asking questions!
 """)
 
-# Instructions for getting an OpenAI API key
-st.subheader("Get an OpenAI API key")
-st.write("You can get your own OpenAI API key by following the instructions:")
-st.write("""
-1. Go to [OpenAI API Keys](https://platform.openai.com/account/api-keys).
-2. Click on the `+ Create new secret key` button.
-3. Next, enter an identifier name (optional) and click on the `Create secret key` button.
-""")
 
 
 @st.cache_resource(ttl="1h")
@@ -130,6 +123,12 @@ uploaded_files = st.sidebar.file_uploader(
 if not uploaded_files:
     st.info("Please upload documents to continue.")
     st.stop()
+
+#add chat part
+chat_query = st.text_input("Chat with 42, enter query : ")
+if chat_query:
+    response = chat.llm_chain.invoke(chat_query)
+    st.write(response)
 
 retriever = configure_retriever(uploaded_files)
 
