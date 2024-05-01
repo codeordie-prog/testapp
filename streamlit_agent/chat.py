@@ -21,14 +21,11 @@ def chat(openai_key:str):
 
     llm_chat = OpenAI(api_key=openai_key)
 
-
-    llm = OpenAI(temperature=0,api_key=openai_key)
-
-    conversation = ConversationChain(
-    llm=llm,
-    prompt = prompt,
+    llm_chain = LLMChain(
+    llm=llm_chat,
+    prompt=prompt,
     verbose=True,
-    memory=memory
+    memory=memory,
 )
 
-    return conversation
+    return llm_chain
