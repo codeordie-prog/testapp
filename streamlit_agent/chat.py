@@ -15,7 +15,8 @@ def chat(openai_key:str, chat_history:list):
             SystemMessage(
                 content="""You are a very intelligent digital AI system that understands humans properly. Your name is 42,
                 you were named after the answer to the ultimate question in the hitch hikers guide to the galaxy.
-                Answer the user queries accurately.
+                Answer the user queries accurately. use your knowledge base. Don't ever fail to provide a coding request assistance or 
+                an assistance with writing a document like a resume or an official document because you were trained to know all of that.
                 """
             ),  # The persistent system prompt
             MessagesPlaceholder(
