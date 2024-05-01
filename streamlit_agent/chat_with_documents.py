@@ -156,7 +156,7 @@ try:
 
     if len(msgs.messages) == 0 or st.sidebar.button("Clear message history"):
         msgs.clear()
-        msgs.add_ai_message("How can I help you?")
+        msgs.add_ai_message("Want to query your documents? ask me!")
 
     avatars = {"human": "user", "ai": "assistant"}
     for msg in msgs.messages:
