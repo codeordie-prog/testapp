@@ -123,22 +123,14 @@ try:
         st.stop()
 
 
-    def chat_session(interaction_count : int, chat_history = []):
+    def chat_session(chat_history = []):
 
         if chat_query := st.text_input("Chat with 42, enter query : "):
-            interaction_count += 1
-            if interaction_count > 20:
-                st.write("Maximum of 20 interactions reached. Please reset the conversation.")
-                if st.button("Reset"):
-                    chat_session(interaction_count=0,chat_history=[])
-                else:
-                    st.stop()
-
             llm_ch = chat.chat(openai_key=openai_api_key,chat_history=chat_history)
             response = llm_ch.invoke(chat_query)
             chat_history.append(response)
             st.write("response: ",response['text'])
-            chat_session(interaction_count)
+            chat_session(chat_history=chat_history)
     
     chat_session(20)
 
