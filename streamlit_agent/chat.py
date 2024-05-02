@@ -31,7 +31,7 @@ def chat(openai_key:str):
         )
 
     msgs = st.StreamlitChatMessageHistory()
-    memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs return_messages=True)
+    memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
 
     llm_chat = OpenAI(api_key=openai_key,streaming=True)
 
