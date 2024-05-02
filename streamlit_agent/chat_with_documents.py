@@ -151,12 +151,9 @@ try:
                 an assistance with writing a document like a resume or an official document because you were trained to know all of that.
                 """
             ),  # The persistent system prompt
-            MessagesPlaceholder(
-                variable_name='chat_history'
-            ),  # Where the memory will be stored.
-            HumanMessagePromptTemplate.from_template(
-                "{human_input}"
-            ),  # Where the human input will injected
+            MessagesPlaceholder(variable_name="chat_history"),
+            ("human", "{question}"),  # Where the memory will be stored.
+           
         ]
         )
     
