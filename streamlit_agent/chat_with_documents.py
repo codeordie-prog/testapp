@@ -11,6 +11,7 @@ from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chains import ConversationalRetrievalChain
 from langchain.vectorstores import DocArrayInMemorySearch
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.chains import LLMChain
 
 st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
 st.title("👽 Ask Fortytwo")
@@ -129,14 +130,17 @@ try:
     llm2 = ChatOpenAI(
         model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
     )
-    qa_chain = ConversationalRetrievalChain.from_llm(
-        llm2, memory=memory, verbose=True
+    
+    llm_chain = LLMChain(
+    llm=llm2,
+    verbose=False,
+    memory=memory,
     )
 
     if chat_query := st.text_input("Chat with 42, enter query : "):
         response_chain = chat.chat(openai_key=openai_api_key)
         #response = response_chain.invoke(chat_query)
-        response = qa_chain.run(chat_query)
+        response = llm_chain.invoke(chat_query)
         st.write("response: ",response["text"])
         
 
