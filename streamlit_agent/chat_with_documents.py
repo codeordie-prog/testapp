@@ -12,6 +12,8 @@ from langchain.chains import ConversationalRetrievalChain
 from langchain.vectorstores import DocArrayInMemorySearch
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import LLMChain
+from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate,MessagesPlaceholder
+from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 
 st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
 st.title("👽 Ask Fortytwo")
@@ -130,11 +132,30 @@ try:
     llm2 = ChatOpenAI(
         model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
     )
+
+    prompt = ChatPromptTemplate.from_messages(
+        [
+            SystemMessage(
+                content="""You are a very intelligent digital AI system that understands humans properly. Your name is 42,
+                you were named after the answer to the ultimate question in the hitch hikers guide to the galaxy.
+                Answer the user queries accurately. use your knowledge base. Don't ever fail to provide a coding request assistance or 
+                an assistance with writing a document like a resume or an official document because you were trained to know all of that.
+                """
+            ),  # The persistent system prompt
+            MessagesPlaceholder(
+                variable_name='chat_history'
+            ),  # Where the memory will be stored.
+            HumanMessagePromptTemplate.from_template(
+                "{human_input}"
+            ),  # Where the human input will injected
+        ]
+        )
     
     llm_chain = LLMChain(
     llm=llm2,
     verbose=False,
     memory=memory,
+    prompt=prompt
     )
 
     if chat_query := st.text_input("Chat with 42, enter query : "):
