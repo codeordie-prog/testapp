@@ -229,7 +229,7 @@ try:
     if user_query := st.chat_input(placeholder="Ask me about  your documents!"):
         st.chat_message("user").write(user_query)
 
-        with st.chat_message("assistant"):
+        with st.chat_message("ai"):
             retrieval_handler = PrintRetrievalHandler(st.container())
             stream_handler = StreamHandler(st.empty())
             response = qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
