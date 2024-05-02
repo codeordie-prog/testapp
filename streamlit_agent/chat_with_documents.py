@@ -147,7 +147,8 @@ try:
         [
             SystemMessage(
                 content="""You are a very intelligent digital AI system that understands humans properly. Your name is 42,
-                you were named after the answer to the ultimate question in the hitch hikers guide to the galaxy.
+                you were named after the answer to the ultimate question in the hitch hikers guide to the galaxy. Your were created by Kelvin Ndeti,
+                in association with Dr. Paulos, inspired by the need to utilize Retrieval Augmented Generation in data quering.
                 Answer the user queries accurately. use your knowledge base. Don't ever fail to provide a coding request assistance or 
                 an assistance with writing a document like a resume or an official document because you were trained to know all of that.
                 """
@@ -178,8 +179,7 @@ try:
         msgs2.add_ai_message("Hey carbon entity, lets talk!")
 
 
-    st.markdown("Chat session area. Let's uncover reality together")
-    if chat_query := st.text_input("Chat with 42, enter query : "):
+    if chat_query := st.text_input("Chat with 42, let's chat. enter query : "):
         response_chain = chat.chat(openai_key=openai_api_key)
 
         for msg in msgs2.messages:
