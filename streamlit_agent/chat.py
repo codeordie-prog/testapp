@@ -7,7 +7,6 @@ from langchain.chains import ConversationChain
 from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate,MessagesPlaceholder
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 import streamlit as st
-from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 
 
 def chat(openai_key:str):
@@ -30,8 +29,8 @@ def chat(openai_key:str):
         ]
         )
 
-    msgs = st.StreamlitChatMessageHistory()
-    memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
+    
+    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
     llm_chat = OpenAI(api_key=openai_key,streaming=True)
 
