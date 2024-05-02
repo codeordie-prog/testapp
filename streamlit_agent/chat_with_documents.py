@@ -181,7 +181,10 @@ try:
 
     if chat_query := st.text_input("Chat with 42, enter query : "):
         response_chain = chat.chat(openai_key=openai_api_key)
-        response = chain_with_history.invoke(chat_query)
+
+        #configure session id
+        config = {"configurable": {"session_id": "any"}}
+        response = chain_with_history.invoke({"question" : chat_query},config=config)
        # response = llm_chain.invoke(chat_query)
         st.write("response: ",response["text"])
         
