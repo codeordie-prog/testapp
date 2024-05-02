@@ -5,7 +5,9 @@ import streamlit as st
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader
 from langchain.memory import ConversationBufferMemory
-from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
+from langchain_community.chat_message_histories import (
+    StreamlitChatMessageHistory,
+)
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chains import ConversationalRetrievalChain
@@ -14,6 +16,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import LLMChain
 from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate,MessagesPlaceholder
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
+from langchain_core.runnables.history import RunnableWithMessageHistory #for chain with history
 
 st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
 st.title("👽 Ask Fortytwo")
@@ -45,7 +48,7 @@ Simply upload your document and start asking questions!
 
 try:
         
-    @st.cache_resource(ttl="1h")
+    @st.cache_resource(ttl="2h")
     def configure_retriever(uploaded_files):
         # Read documents
         docs = []
@@ -133,7 +136,7 @@ try:
     #initialize the chain with all the set up fields i.e promp,memory,verbose false and llm
     #use the chain to invoke chat query
 
-    msgs2 = StreamlitChatMessageHistory()
+    msgs2 = StreamlitChatMessageHistory(key="chat_history")
     memory2 = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs2, return_messages=True)
     llm2 = ChatOpenAI(
         model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
@@ -163,6 +166,13 @@ try:
     memory=memory2,
     prompt=prompt
     )
+    #chain with history
+    chain_with_history = RunnableWithMessageHistory(
+    llm_chain,
+    lambda session_id: msgs2,  # Always return the instance created earlier
+    input_messages_key="question",
+    history_messages_key="chat_history",
+    )
 
     if len(msgs2.messages) == 0 or st.sidebar.button("Clear chat_with_42 message history"):
         msgs2.clear()
@@ -171,7 +181,8 @@ try:
 
     if chat_query := st.text_input("Chat with 42, enter query : "):
         response_chain = chat.chat(openai_key=openai_api_key)
-        response = llm_chain.invoke(chat_query)
+        response = chain_with_history.invoke(chat_query)
+       # response = llm_chain.invoke(chat_query)
         st.write("response: ",response["text"])
         
 
