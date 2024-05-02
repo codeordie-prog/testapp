@@ -178,6 +178,7 @@ try:
         msgs2.add_ai_message("Hey carbon entity, lets talk!")
 
 
+    st.markdown("Chat session area. Let's uncover reality together")
     if chat_query := st.text_input("Chat with 42, enter query : "):
         response_chain = chat.chat(openai_key=openai_api_key)
 
@@ -223,7 +224,8 @@ try:
     avatars = {"human": "user", "ai": "assistant"}
     for msg in msgs.messages:
         st.chat_message(avatars[msg.type]).write(msg.content)
-
+    
+    st.markdown("Document query section. Utilize RAG you curious being.")
     if user_query := st.chat_input(placeholder="Ask me about  your documents!"):
         st.chat_message("user").write(user_query)
 
