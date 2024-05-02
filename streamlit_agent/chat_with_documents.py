@@ -122,10 +122,21 @@ try:
         st.info("Please add your OpenAI API key to continue.")
         st.stop()
 
+    #chat setup
+     # Setup LLM and QA chain
+    msgs2 = StreamlitChatMessageHistory()
+    memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs2, return_messages=True)
+    llm2 = ChatOpenAI(
+        model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
+    )
+    qa_chain = ConversationalRetrievalChain.from_llm(
+        llm2, memory=memory, verbose=True
+    )
 
     if chat_query := st.text_input("Chat with 42, enter query : "):
         response_chain = chat.chat(openai_key=openai_api_key)
-        response = response_chain.invoke(chat_query)
+        #response = response_chain.invoke(chat_query)
+        response = qa_chain.run(chat_query)
         st.write("response: ",response["text"])
         
 
