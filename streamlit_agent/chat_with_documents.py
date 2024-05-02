@@ -122,6 +122,7 @@ try:
             self.status.update(state="complete")
 
 
+    #the interaction setup part
 
     openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
     if not openai_api_key:
@@ -163,6 +164,7 @@ try:
     memory=memory2,
     prompt=prompt
     )
+
     #chain with history
     chain_with_history = RunnableWithMessageHistory(
     llm_chain,
@@ -202,11 +204,11 @@ try:
 
     retriever = configure_retriever(uploaded_files)
 
-    # Setup memory for contextual conversation
+    # Setup memory for contextual conversation for the documents part
     msgs = StreamlitChatMessageHistory()
     memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
 
-    # Setup LLM and QA chain
+    # Setup LLM and QA chain for the documents part
     llm = ChatOpenAI(
         model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
     )
