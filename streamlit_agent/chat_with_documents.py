@@ -126,9 +126,15 @@ try:
         st.stop()
 
     #chat setup
-     # Setup LLM and QA chain
+    # Setup LLM and QA chain - msg variable for chat history from streamlitchatmessagehistory
+    #set up the memory with chat_memory as the msg variable -use conversational buffer memory
+    #set up the prompt
+    #initialize the llm with streaming true
+    #initialize the chain with all the set up fields i.e promp,memory,verbose false and llm
+    #use the chain to invoke chat query
+
     msgs2 = StreamlitChatMessageHistory()
-    memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs2, return_messages=True)
+    memory2 = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs2, return_messages=True)
     llm2 = ChatOpenAI(
         model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
     )
@@ -154,13 +160,17 @@ try:
     llm_chain = LLMChain(
     llm=llm2,
     verbose=False,
-    memory=memory,
+    memory=memory2,
     prompt=prompt
     )
 
+    if len(msgs2.messages) == 0 or st.sidebar.button("Clear chat_with_42 message history"):
+        msgs2.clear()
+        msgs2.add_ai_message("Hey carbon entity, lets talk!")
+
+
     if chat_query := st.text_input("Chat with 42, enter query : "):
         response_chain = chat.chat(openai_key=openai_api_key)
-        #response = response_chain.invoke(chat_query)
         response = llm_chain.invoke(chat_query)
         st.write("response: ",response["text"])
         
