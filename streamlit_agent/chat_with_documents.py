@@ -2,6 +2,7 @@ import os
 import tempfile
 import chat
 import streamlit as st
+from io import BytesIO
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader
 from langchain.memory import ConversationBufferMemory
@@ -88,6 +89,17 @@ try:
 
         return retriever
 
+    #define download txt
+    def create_and_download(text_content:str):
+
+        buffer = BytesIO
+        buffer.write(text_content.encode('utf-8'))
+        buffer.seek(0)
+
+        st.download_button(label="Download txt",
+                  data=buffer,
+                  file_name="my_textfile.txt",
+                  mime = "text/plain")
 
     class StreamHandler(BaseCallbackHandler):
         def __init__(self, container: st.delta_generator.DeltaGenerator, initial_text: str = ""):
@@ -193,6 +205,10 @@ try:
         response = chain_with_history.invoke({"question" : chat_query},config=config)
        # response = llm_chain.invoke(chat_query)
         st.write("response: ",response["text"])
+
+        #download button
+        if st.button("Create and download txt"):
+            create_and_download(text_content=response['text'])
         
 
     uploaded_files = st.sidebar.file_uploader(
@@ -233,6 +249,8 @@ try:
             retrieval_handler = PrintRetrievalHandler(st.container())
             stream_handler = StreamHandler(st.empty())
             response = qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+
+            
 
 
 except Exception as e:
