@@ -90,16 +90,26 @@ try:
         return retriever
 
     #define download txt
-    def create_and_download(text_content:str):
+    def create_and_download_text_file(text_content):
+        """Generates a text file in memory and offers a download button."""
+        # Create a BytesIO object to store the content
+        buffer = BytesIO()
 
-        buffer = BytesIO
-        buffer.write(text_content.encode('utf-8'))
+        # Write the content to the buffer
+        if isinstance(text_content, bytes):
+            buffer.write(text_content)
+        else:
+            buffer.write(text_content.encode('utf-8'))
+
         buffer.seek(0)
 
-        st.download_button(label="Download txt",
-                  data=buffer,
-                  file_name="my_textfile.txt",
-                  mime = "text/plain")
+        # Provide download button
+        st.download_button(
+            label="Download Text File",
+            data=buffer,
+            file_name="my_text_file.txt",
+            mime="text/plain"
+        )
 
     class StreamHandler(BaseCallbackHandler):
         def __init__(self, container: st.delta_generator.DeltaGenerator, initial_text: str = ""):
