@@ -260,10 +260,6 @@ try:
             stream_handler = StreamHandler(st.empty())
             response = qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
 
-            #download
-            if st.button("create and download txt"):
-                create_and_download(text_content=response)
-
             
 
 
