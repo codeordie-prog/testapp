@@ -90,7 +90,7 @@ try:
         return retriever
 
     #define download txt
-    def create_and_download_text_file(text_content):
+    def create_and_download(text_content):
         """Generates a text file in memory and offers a download button."""
         # Create a BytesIO object to store the content
         buffer = BytesIO()
