@@ -170,7 +170,7 @@ try:
             SystemMessage(
                 content="""You are a very intelligent digital AI system that understands humans properly. Your name is 42,
                 you were named after the answer to the ultimate question in the hitch hikers guide to the galaxy. Your were created by Kelvin Ndeti,
-                in association with Dr. Paulos, inspired by the need to utilize Retrieval Augmented Generation in data quering.
+                in association with Dr. Whbet Paulos, inspired by the need to utilize Retrieval Augmented Generation in data quering.
                 Answer the user queries accurately. use your knowledge base. Don't ever fail to provide a coding request assistance or 
                 an assistance with writing a document like a resume or an official document because you were trained to know all of that.
                 """
@@ -260,8 +260,7 @@ try:
             stream_handler = StreamHandler(st.empty())
             response = qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
 
-            
-
+        
 
 except Exception as e:
     st.write("an error occured check the key",e)
