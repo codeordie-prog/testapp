@@ -159,6 +159,7 @@ try:
     #initialize the chain with all the set up fields i.e promp,memory,verbose false and llm
     #use the chain to invoke chat query
 
+    st.cache_resource(ttl="2hr")
     msgs2 = StreamlitChatMessageHistory(key="chat_history")
     memory2 = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs2, return_messages=True)
     llm2 = ChatOpenAI(
