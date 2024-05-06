@@ -203,7 +203,6 @@ try:
             msgs2.add_ai_message("Hey carbon entity, lets talk!")
 
         if chat_query := st.text_input("Chat with 42, let's chat. enter query : "):
-            response_chain = chat.chat(openai_key=openai_api_key)
 
             for msg in msgs2.messages:
                 st.chat_message(msg.type).write(msg.content)
@@ -213,14 +212,11 @@ try:
 
             #configure session id
             config = {"configurable": {"session_id": "any"},}
-
-            
-
             response = chain_with_history.invoke({"question" : chat_query},config=config)
             # response = llm_chain.invoke(chat_query)
             st.write("response: ",response["text"])
 
-                #download button
+            #download button
             if st.button("Create and download txt"):
                 create_and_download(text_content=response['text'])
 
