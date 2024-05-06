@@ -201,6 +201,9 @@ try:
         msgs2.clear()
         msgs2.add_ai_message("Hey carbon entity, lets talk!")
 
+    avatars2 = {"human": "user", "ai": "assistant"}
+    for msg in msgs2.messages:
+        st.chat_message(avatars2[msg.type]).write(msg.content)
 
     if chat_query := st.text_input("Chat with 42, let's chat. enter query : "):
         response_chain = chat.chat(openai_key=openai_api_key)
@@ -212,7 +215,7 @@ try:
             st.chat_message("human").write(prompt)
 
         #configure session id
-        config = {"configurable": {"session_id": "any"}}
+        config = {"configurable": {"session_id": "any"},}
 
         ##handle stream
         with st.chat_message("ai"):
