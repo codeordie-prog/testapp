@@ -222,7 +222,7 @@ try:
              retrieval_handr = PrintRetrievalHandler(st.container())
              stream_handr = StreamHandler(st.empty())
 
-             response = chain_with_history.invoke({"question" : chat_query},config=config)
+             response = chain_with_history.invoke({"question" : chat_query},config=config,callbacks=[retrieval_handr, stream_handr])
            # response = llm_chain.invoke(chat_query)
              st.write("response: ",response["text"])
 
