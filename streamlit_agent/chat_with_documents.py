@@ -41,9 +41,6 @@ Utilizing RAG approach powered by OpenAI's GPT models, the app provides insightf
          
 - Note : clear message history button resets the context of the conversation else, 42 might answer 'I don't know".
 
-
-### Get Started
-Simply upload your document and start asking questions!
 """)
 
 #instructions
@@ -57,7 +54,11 @@ st.write("""
 4. Next, enter an identifier name (optional) and click on the `Create secret key` button.
 """)
 
+st.write("""
+###GET STARTED
 
+simply upload your documents and query 42, or just engage in a chat below:
+""")
 try:
     
     class StreamHandler(BaseCallbackHandler):
