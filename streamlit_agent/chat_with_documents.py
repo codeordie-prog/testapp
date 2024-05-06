@@ -48,7 +48,7 @@ Simply upload your document and start asking questions!
 
 
 try:
-        
+    #function-1   
     @st.cache_resource(ttl="2h")
     def configure_retriever(uploaded_files):
         # Read documents
@@ -71,10 +71,7 @@ try:
             
             elif temp_filepath.endswith(".csv"):
                 loader = CSVLoader(temp_filepath)
-                docs.extend(loader.load())
-
-        
-            
+                docs.extend(loader.load())   
 
         # Split documents
         text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=200)
@@ -89,6 +86,7 @@ try:
 
         return retriever
 
+    #function-2
     #define download txt
     def create_and_download(text_content):
         """Generates a text file in memory and offers a download button."""
@@ -160,110 +158,118 @@ try:
     #use the chain to invoke chat query
 
     st.cache_resource(ttl="2hr")
-    msgs2 = StreamlitChatMessageHistory(key="chat_history")
-    memory2 = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs2, return_messages=True)
-    llm2 = ChatOpenAI(
-        model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
-    )
-
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            SystemMessage(
-                content="""You are a very intelligent digital AI system that understands humans properly. Your name is 42,
-                you were named after the answer to the ultimate question in the hitch hikers guide to the galaxy. Your were created by Kelvin Ndeti,
-                in association with Dr. Whbet Paulos, inspired by the need to utilize Retrieval Augmented Generation in data quering.
-                Answer the user queries accurately. use your knowledge base. Don't ever fail to provide a coding request assistance or 
-                an assistance with writing a document like a resume or an official document because you were trained to know all of that.
-                """
-            ),  # The persistent system prompt
-            MessagesPlaceholder(variable_name="chat_history"),
-            ("human", "{question}"),  # Where the memory will be stored.
-           
-        ]
+    def chat_with_42():
+        msgs2 = StreamlitChatMessageHistory(key="chat_history")
+        memory2 = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs2, return_messages=True)
+        llm2 = ChatOpenAI(
+            model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
         )
-    
-    llm_chain = LLMChain(
-    llm=llm2,
-    verbose=False,
-    memory=memory2,
-    prompt=prompt
-    )
 
-    #chain with history
-    chain_with_history = RunnableWithMessageHistory(
-    llm_chain,
-    lambda session_id: msgs2,  # Always return the instance created earlier
-    input_messages_key="question",
-    history_messages_key="chat_history",
-    )
-
-    if len(msgs2.messages) == 0 or st.sidebar.button("Clear chat_with_42 message history"):
-        msgs2.clear()
-        msgs2.add_ai_message("Hey carbon entity, lets talk!")
-
-    if chat_query := st.text_input("Chat with 42, let's chat. enter query : "):
-        response_chain = chat.chat(openai_key=openai_api_key)
-
-        for msg in msgs2.messages:
-            st.chat_message(msg.type).write(msg.content)
-
-        if prompt := st.chat_input():
-            st.chat_message("human").write(prompt)
-
-        #configure session id
-        config = {"configurable": {"session_id": "any"},}
-
+        prompt = ChatPromptTemplate.from_messages(
+            [
+                SystemMessage(
+                    content="""You are a very intelligent digital AI system that understands humans properly. Your name is 42,
+                    you were named after the answer to the ultimate question in the hitch hikers guide to the galaxy. Your were created by Kelvin Ndeti,
+                    in association with Dr. Whbet Paulos, inspired by the need to utilize Retrieval Augmented Generation in data quering.
+                    Answer the user queries accurately. use your knowledge base. Don't ever fail to provide a coding request assistance or 
+                    an assistance with writing a document like a resume or an official document because you were trained to know all of that.
+                    """
+                ),  # The persistent system prompt
+                MessagesPlaceholder(variable_name="chat_history"),
+                ("human", "{question}"),  # Where the memory will be stored.
+            
+            ]
+            )
         
+        llm_chain = LLMChain(
+        llm=llm2,
+        verbose=False,
+        memory=memory2,
+        prompt=prompt
+        )
 
-        response = chain_with_history.invoke({"question" : chat_query},config=config)
-        # response = llm_chain.invoke(chat_query)
-        st.write("response: ",response["text"])
+        #chain with history
+        chain_with_history = RunnableWithMessageHistory(
+        llm_chain,
+        lambda session_id: msgs2,  # Always return the instance created earlier
+        input_messages_key="question",
+        history_messages_key="chat_history",
+        )
 
-             #download button
-        if st.button("Create and download txt"):
-            create_and_download(text_content=response['text'])
+        if len(msgs2.messages) == 0 or st.sidebar.button("Clear chat_with_42 message history"):
+            msgs2.clear()
+            msgs2.add_ai_message("Hey carbon entity, lets talk!")
+
+        if chat_query := st.text_input("Chat with 42, let's chat. enter query : "):
+            response_chain = chat.chat(openai_key=openai_api_key)
+
+            for msg in msgs2.messages:
+                st.chat_message(msg.type).write(msg.content)
+
+            if prompt := st.chat_input():
+                st.chat_message("human").write(prompt)
+
+            #configure session id
+            config = {"configurable": {"session_id": "any"},}
+
             
 
-    uploaded_files = st.sidebar.file_uploader(
-        label="Upload files", type=["pdf","txt","csv"], accept_multiple_files=True
-    )
-    if not uploaded_files:
-        st.info("Please upload documents to continue.")
-        st.stop()
+            response = chain_with_history.invoke({"question" : chat_query},config=config)
+            # response = llm_chain.invoke(chat_query)
+            st.write("response: ",response["text"])
+
+                #download button
+            if st.button("Create and download txt"):
+                create_and_download(text_content=response['text'])
+                
+    def query_documents():
+        uploaded_files = st.sidebar.file_uploader(
+            label="Upload files", type=["pdf","txt","csv"], accept_multiple_files=True
+        )
+        if not uploaded_files:
+            st.info("Please upload documents to continue.")
+            st.stop()
 
 
-    retriever = configure_retriever(uploaded_files)
+        retriever = configure_retriever(uploaded_files)
 
-    # Setup memory for contextual conversation for the documents part
-    msgs = StreamlitChatMessageHistory()
-    memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
+        # Setup memory for contextual conversation for the documents part
+        msgs = StreamlitChatMessageHistory()
+        memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
 
-    # Setup LLM and QA chain for the documents part
-    llm = ChatOpenAI(
-        model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
-    )
-    qa_chain = ConversationalRetrievalChain.from_llm(
-        llm, retriever=retriever, memory=memory, verbose=True
-    )
+        # Setup LLM and QA chain for the documents part
+        llm = ChatOpenAI(
+            model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
+        )
+        qa_chain = ConversationalRetrievalChain.from_llm(
+            llm, retriever=retriever, memory=memory, verbose=True
+        )
 
-    if len(msgs.messages) == 0 or st.sidebar.button("Clear message history"):
-        msgs.clear()
-        msgs.add_ai_message("Hey carbon entity, Want to query your documents? ask me!")
+        if len(msgs.messages) == 0 or st.sidebar.button("Clear message history"):
+            msgs.clear()
+            msgs.add_ai_message("Hey carbon entity, Want to query your documents? ask me!")
 
-    avatars = {"human": "user", "ai": "assistant"}
-    for msg in msgs.messages:
-        st.chat_message(avatars[msg.type]).write(msg.content)
-    
-    st.markdown("Document query section. Utilize RAG you curious being.")
-    if user_query := st.chat_input(placeholder="Ask me about  your documents!"):
-        st.chat_message("user").write(user_query)
-
-        with st.chat_message("ai"):
-            retrieval_handler = PrintRetrievalHandler(st.container())
-            stream_handler = StreamHandler(st.empty())
-            response = qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
-
+        avatars = {"human": "user", "ai": "assistant"}
+        for msg in msgs.messages:
+            st.chat_message(avatars[msg.type]).write(msg.content)
         
+        st.markdown("Document query section. Utilize RAG you curious being.")
+        if user_query := st.chat_input(placeholder="Ask me about  your documents!"):
+            st.chat_message("user").write(user_query)
+
+            with st.chat_message("ai"):
+                retrieval_handler = PrintRetrievalHandler(st.container())
+                stream_handler = StreamHandler(st.empty())
+                response = qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+
+
+    def main():
+        chat_with_42()
+        query_documents()
+
+    
+    main()
+
 
 except Exception as e:
     st.write("an error occured check the key",e)
