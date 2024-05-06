@@ -55,7 +55,7 @@ st.write("""
 """)
 
 st.write("""
-###GET STARTED
+### GET STARTED
 
 simply upload your documents and query 42, or just engage in a chat below:
 """)
