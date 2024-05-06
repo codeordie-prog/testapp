@@ -213,14 +213,20 @@ try:
 
         #configure session id
         config = {"configurable": {"session_id": "any"}}
-        response = chain_with_history.invoke({"question" : chat_query},config=config)
-       # response = llm_chain.invoke(chat_query)
-        st.write("response: ",response["text"])
 
-        #download button
-        if st.button("Create and download txt"):
-            create_and_download(text_content=response['text'])
-        
+        ##handle stream
+        with st.chat_message("ai"):
+             retrieval_handr = PrintRetrievalHandler(st.container())
+             stream_handr = StreamHandler(st.empty())
+
+             response = chain_with_history.invoke({"question" : chat_query},config=config)
+           # response = llm_chain.invoke(chat_query)
+             st.write("response: ",response["text"])
+
+             #download button
+             if st.button("Create and download txt"):
+                create_and_download(text_content=response['text'])
+            
 
     uploaded_files = st.sidebar.file_uploader(
         label="Upload files", type=["pdf","txt","csv"], accept_multiple_files=True
