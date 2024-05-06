@@ -201,10 +201,6 @@ try:
         msgs2.clear()
         msgs2.add_ai_message("Hey carbon entity, lets talk!")
 
-    avatars2 = {"human": "user", "ai": "assistant"}
-    for msg in msgs2.messages:
-        st.chat_message(avatars2[msg.type]).write(msg.content)
-
     if chat_query := st.text_input("Chat with 42, let's chat. enter query : "):
         response_chain = chat.chat(openai_key=openai_api_key)
 
@@ -217,18 +213,15 @@ try:
         #configure session id
         config = {"configurable": {"session_id": "any"},}
 
-        ##handle stream
-        with st.chat_message("ai"):
-             retrieval_handr = PrintRetrievalHandler(st.container())
-             stream_handr = StreamHandler(st.empty())
+        
 
-             response = chain_with_history.invoke({"question" : chat_query},config=config,callbacks=[retrieval_handr, stream_handr])
-           # response = llm_chain.invoke(chat_query)
-             st.write("response: ",response["text"])
+        response = chain_with_history.invoke({"question" : chat_query},config=config)
+        # response = llm_chain.invoke(chat_query)
+        st.write("response: ",response["text"])
 
              #download button
-             if st.button("Create and download txt"):
-                create_and_download(text_content=response['text'])
+        if st.button("Create and download txt"):
+            create_and_download(text_content=response['text'])
             
 
     uploaded_files = st.sidebar.file_uploader(
