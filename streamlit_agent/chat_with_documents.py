@@ -100,6 +100,10 @@ try:
         st.info("Please add your OpenAI API key to continue.")
         st.stop()
 
+    uploaded_files = st.sidebar.file_uploader(
+            label="Upload files", type=["pdf","txt","csv"], accept_multiple_files=True
+        )
+
     #chat setup
     # Setup LLM and QA chain - msg variable for chat history from streamlitchatmessagehistory
     #set up the memory with chat_memory as the msg variable -use conversational buffer memory
@@ -207,7 +211,7 @@ try:
         llm_chain,
         lambda session_id: msgs2,  # Always return the instance created earlier
         input_messages_key="question",
-        history_messages_key="chat_history",
+        history_messages_key="chat_history"
         )
 
         if len(msgs2.messages) == 0 or st.sidebar.button("Clear chat_with_42 message history"):
@@ -234,9 +238,7 @@ try:
 
      #function-4 query documents           
     def query_documents():
-        uploaded_files = st.sidebar.file_uploader(
-            label="Upload files", type=["pdf","txt","csv"], accept_multiple_files=True
-        )
+       
         if not uploaded_files:
             st.info("Please upload documents to continue.")
             st.stop()
@@ -275,8 +277,12 @@ try:
 
     #main function
     def main():
-        chat_with_42()
-        query_documents()
+
+        if uploaded_files:
+        
+            query_documents()
+        else:
+            chat_with_42()
 
     
     #call main
