@@ -20,7 +20,7 @@ from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory #for chain with history
 
 st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
-st.title("👽 Ask Fortytwo")
+st.title("👽 Ask Fortytwo 🛸🌌")
 st.markdown("*Unlocking the mysteries of the universe, one question at a time*")
 
 # Explanation of the App
