@@ -19,6 +19,9 @@ from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory #for chain with history
 
+from langchain.chains import create_retrieval_chain
+from langchain.chains.combine_documents import create_stuff_documents_chain
+
 st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
 st.title("👽 Ask Fortytwo 🛸🌌")
 st.markdown("*Unlocking the mysteries of the universe, one question at a time*")
@@ -249,7 +252,7 @@ try:
                     content="""You are a very intelligent digital AI system that understands humans properly. Your name is 42,
                     you were named after the answer to the ultimate question in the hitch hikers guide to the galaxy. Your were created by Kelvin Ndeti,
                     in association with Dr. Whbet Paulos, inspired by the need to utilize Retrieval Augmented Generation in data quering.
-                    Answer the user queries accurately. use your knowledge base. Don't ever fail to provide a coding request assistance or 
+                    Answer the user queries accurately. use your knowledge base plus the documents provided. Don't ever fail to provide a coding request assistance or 
                     an assistance with writing a document like a resume or an official document because you were trained to know all of that.
                     """
                 ),  # The persistent system prompt
@@ -267,8 +270,12 @@ try:
 
         # Setup LLM and QA chain for the documents part
         llm = ChatOpenAI(
-            model_name="gpt-4", openai_api_key=openai_api_key, temperature=0, streaming=True,prompt=prompt
+            model_name="gpt-4", openai_api_key=openai_api_key, temperature=0, streaming=True
         )
+
+        question_answer_chain = create_stuff_documents_chain(llm, prompt)
+        chain = create_retrieval_chain(retriever, question_answer_chain)
+
         qa_chain = ConversationalRetrievalChain.from_llm(
             llm, retriever=retriever, memory=memory, verbose=True
         )
@@ -288,7 +295,8 @@ try:
             with st.chat_message("ai"):
                 retrieval_handler = PrintRetrievalHandler(st.container())
                 stream_handler = StreamHandler(st.empty())
-                qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+                #qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+                chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
                
     #main function
     def main():
