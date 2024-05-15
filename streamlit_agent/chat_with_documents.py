@@ -221,23 +221,16 @@ try:
             msgs2.clear()
             msgs2.add_ai_message("Hey carbon entity, lets talk!")
     
-        #if chat_query := st.text_input("Chat with 42, let's chat. enter query : "):
+        if chat_query := st.text_input("Chat with 42, let's chat. enter query : "):
 
-        for msg in msgs2.messages:
-            st.chat_message(msg.type).write(msg.content)
+            for msg in msgs2.messages:
+                st.chat_message(msg.type).write(msg.content)
 
-        if "enter_query" not in st.session_state:
-            st.session_state['enter_query'] = ''
-        query = st.text_input("Enter query", st.session_state['enter_query'])
-
-        if st.button("send query"):
-            with st.empty() as container:
-                stream_handlerr = StreamHandler(container)
-                response = llm_chain.invoke(query, callbacks=[stream_handlerr])
-            st.write("response: ",response['text'])
+            if prompt := st.chat_input():
+                st.chat_message("human").write(prompt)
                 #configure session id
-            #config = {"configurable": {"session_id": "any"},}
-            #response = chain_with_history.invoke({"question" : chat_query},config=config)
+            config = {"configurable": {"session_id": "any"},}
+            response = chain_with_history.invoke({"question" : chat_query},config=config)
             # response = llm_chain.invoke(chat_query)
             #st.write("response: ",response['text'])
 
