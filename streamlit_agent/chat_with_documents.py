@@ -234,10 +234,10 @@ try:
         if prompt := st.chat_input():
             st.chat_message("human").write(prompt)
 
-        with st.empty() as container:
-            stream_handlerr = StreamHandler(container)
-            if st.button("send query"):
+        if st.button("send query"):
 
+            with st.empty() as container:
+                stream_handlerr = StreamHandler(container)
                 response = llm_chain.invoke(query, callbacks=[stream_handlerr])
 
             #configure session id
