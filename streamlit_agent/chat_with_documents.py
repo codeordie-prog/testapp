@@ -234,7 +234,7 @@ try:
             #config = {"configurable": {"session_id": "any"},}
             #response = chain_with_history.invoke({"question" : chat_query},config=config)
             # response = llm_chain.invoke(chat_query)
-            st.write("response: ",response)
+            st.write("response: ",response['text'])
 
             #download button
             if st.button("Create and download txt"):
