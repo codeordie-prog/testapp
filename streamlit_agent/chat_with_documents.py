@@ -243,7 +243,22 @@ try:
             st.info("Please upload documents to continue.")
             st.stop()
 
-
+        prompt = ChatPromptTemplate.from_messages(
+            [
+                SystemMessage(
+                    content="""You are a very intelligent digital AI system that understands humans properly. Your name is 42,
+                    you were named after the answer to the ultimate question in the hitch hikers guide to the galaxy. Your were created by Kelvin Ndeti,
+                    in association with Dr. Whbet Paulos, inspired by the need to utilize Retrieval Augmented Generation in data quering.
+                    Answer the user queries accurately. use your knowledge base. Don't ever fail to provide a coding request assistance or 
+                    an assistance with writing a document like a resume or an official document because you were trained to know all of that.
+                    """
+                ),  # The persistent system prompt
+                MessagesPlaceholder(variable_name="chat_history"),
+                ("human", "{question}"),  # Where the memory will be stored.
+            
+            ]
+            )
+        
         retriever = configure_retriever(uploaded_files)
 
         # Setup memory for contextual conversation for the documents part
@@ -255,7 +270,7 @@ try:
             model_name="gpt-4", openai_api_key=openai_api_key, temperature=0, streaming=True
         )
         qa_chain = ConversationalRetrievalChain.from_llm(
-            llm, retriever=retriever, memory=memory, verbose=True
+            llm, retriever=retriever, memory=memory, verbose=True,prompt = prompt
         )
 
         if len(msgs.messages) == 0 or st.sidebar.button("Clear message history"):
