@@ -252,7 +252,7 @@ try:
 
         # Setup LLM and QA chain for the documents part
         llm = ChatOpenAI(
-            model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
+            model_name="gpt-4", openai_api_key=openai_api_key, temperature=0, streaming=True
         )
         qa_chain = ConversationalRetrievalChain.from_llm(
             llm, retriever=retriever, memory=memory, verbose=True
