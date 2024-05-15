@@ -274,6 +274,7 @@ try:
                 retrieval_handler = PrintRetrievalHandler(st.container())
                 stream_handler = StreamHandler(st.empty())
                 response = qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+                st.write(response)
 
     #main function
     def main():
