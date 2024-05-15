@@ -245,7 +245,8 @@ try:
             st.info("Please upload documents to continue.")
             st.stop()
 
-        system_instruction = "The assistant should provide detailed explanations, use both the documents and the trained knowldge to answer."
+        system_instruction = """The assistant shall not only rely on its knowledge base, but also the documents retrieved to 
+        provide detailed explanations."""
 
         # Define your template with the system instruction
         template = (
