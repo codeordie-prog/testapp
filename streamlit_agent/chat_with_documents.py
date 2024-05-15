@@ -19,8 +19,7 @@ from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory #for chain with history
 
-from langchain.chains import create_retrieval_chain
-from langchain.chains.combine_documents import create_stuff_documents_chain
+from langchain.prompts import PromptTemplate
 
 st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
 st.title("👽 Ask Fortytwo 🛸🌌")
@@ -246,19 +245,19 @@ try:
             st.info("Please upload documents to continue.")
             st.stop()
 
-        system_prompt = (
-            "Use the given context to answer the question. "
-            "If you don't know the answer, say you don't know. "
-            "Use three sentence maximum and keep the answer concise. "
-            "Context: {context}"
+        system_instruction = "The assistant should provide detailed explanations, use both the documents and the trained knowldge to answer."
+
+        # Define your template with the system instruction
+        template = (
+            f"{system_instruction} "
+            "Combine the chat history and follow up question into "
+            "a standalone question. Chat History: {chat_history}"
+            "Follow up question: {question}"
         )
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                ("system", system_prompt),
-                ("human", "{input}"),
-            ]
-        )
-        
+
+        # Create the prompt template
+        condense_question_prompt = PromptTemplate.from_template(template)
+
         retriever = configure_retriever(uploaded_files)
 
         # Setup memory for contextual conversation for the documents part
@@ -270,11 +269,14 @@ try:
             model_name="gpt-4", openai_api_key=openai_api_key, temperature=0, streaming=True
         )
 
-        question_answer_chain = create_stuff_documents_chain(llm, prompt)
-        chain = create_retrieval_chain(retriever, question_answer_chain)
 
         qa_chain = ConversationalRetrievalChain.from_llm(
-            llm, retriever=retriever, memory=memory, verbose=True
+            llm, 
+            retriever=retriever, 
+            memory=memory, 
+            verbose=True, 
+            condense_question_prompt=condense_question_prompt,
+            chain_type="stuff",
         )
 
         if len(msgs.messages) == 0 or st.sidebar.button("Clear message history"):
@@ -292,8 +294,8 @@ try:
             with st.chat_message("ai"):
                 retrieval_handler = PrintRetrievalHandler(st.container())
                 stream_handler = StreamHandler(st.empty())
-                #qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
-                chain.invoke({"input":user_query},callbacks=[retrieval_handler, stream_handler])
+                qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+               
                
     #main function
     def main():
