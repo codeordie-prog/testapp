@@ -246,21 +246,18 @@ try:
             st.info("Please upload documents to continue.")
             st.stop()
 
+        system_prompt = (
+            "Use the given context to answer the question. "
+            "If you don't know the answer, say you don't know. "
+            "Use three sentence maximum and keep the answer concise. "
+            "Context: {context}"
+        )
         prompt = ChatPromptTemplate.from_messages(
             [
-                SystemMessage(
-                    content="""You are a very intelligent digital AI system that understands humans properly. Your name is 42,
-                    you were named after the answer to the ultimate question in the hitch hikers guide to the galaxy. Your were created by Kelvin Ndeti,
-                    in association with Dr. Whbet Paulos, inspired by the need to utilize Retrieval Augmented Generation in data quering.
-                    Answer the user queries accurately. use your knowledge base plus the documents provided. Don't ever fail to provide a coding request assistance or 
-                    an assistance with writing a document like a resume or an official document because you were trained to know all of that.
-                    """
-                ),  # The persistent system prompt
-                MessagesPlaceholder(variable_name="chat_history"),
-                ("human", "{question}"),  # Where the memory will be stored.
-            
+                ("system", system_prompt),
+                ("human", "{input}"),
             ]
-            )
+        )
         
         retriever = configure_retriever(uploaded_files)
 
