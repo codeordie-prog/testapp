@@ -78,6 +78,9 @@ try:
             self.text += token
             self.container.markdown(self.text)
 
+        def on_llm_end(self, **kwargs):
+            self.run_id_ignore_token = None  # Reset the ignore token when LLM ends
+
 
     class PrintRetrievalHandler(BaseCallbackHandler):
         def __init__(self, container):
