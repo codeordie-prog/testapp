@@ -78,9 +78,6 @@ try:
             self.text += token
             self.container.markdown(self.text)
 
-        def on_llm_end(self, **kwargs):
-            self.run_id_ignore_token = None  # Reset the ignore token when LLM ends
-
 
     class PrintRetrievalHandler(BaseCallbackHandler):
         def __init__(self, container):
@@ -220,7 +217,7 @@ try:
         if len(msgs2.messages) == 0 or st.sidebar.button("Clear chat_with_42 message history"):
             msgs2.clear()
             msgs2.add_ai_message("Hey carbon entity, lets talk!")
-    
+
         if chat_query := st.text_input("Chat with 42, let's chat. enter query : "):
 
             for msg in msgs2.messages:
@@ -228,11 +225,12 @@ try:
 
             if prompt := st.chat_input():
                 st.chat_message("human").write(prompt)
-                #configure session id
+
+            #configure session id
             config = {"configurable": {"session_id": "any"},}
             response = chain_with_history.invoke({"question" : chat_query},config=config)
             # response = llm_chain.invoke(chat_query)
-            #st.write("response: ",response['text'])
+            st.write("response: ",response["text"])
 
             #download button
             if st.button("Create and download txt"):
