@@ -293,7 +293,7 @@ try:
                 retrieval_handler = PrintRetrievalHandler(st.container())
                 stream_handler = StreamHandler(st.empty())
                 #qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
-                chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+                chain.invoke({"input":user_query})
                
     #main function
     def main():
