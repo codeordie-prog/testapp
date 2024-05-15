@@ -226,9 +226,13 @@ try:
             if prompt := st.chat_input():
                 st.chat_message("human").write(prompt)
 
+            with st.empty() as container:
+                stream_handlerr = StreamHandler(container)
+                response = llm_chain.run(chat_query, callbacks=[stream_handlerr])
+
             #configure session id
-            config = {"configurable": {"session_id": "any"},}
-            response = chain_with_history.invoke({"question" : chat_query},config=config)
+            #config = {"configurable": {"session_id": "any"},}
+            #response = chain_with_history.invoke({"question" : chat_query},config=config)
             # response = llm_chain.invoke(chat_query)
             st.write("response: ",response["text"])
 
