@@ -41,9 +41,9 @@ image_bytes = load_image(image_path)
 col1, col2, col3 = st.columns([1, 2, 1])
 
 # Display the image in the center column
-with col2:
+with col1:
     if image_bytes:
-        st.image(io.BytesIO(image_bytes), width=400)
+        st.image(io.BytesIO(image_bytes), width=200)
     else:
         st.error("Failed to load image.")
 st.title("Forty Two")
