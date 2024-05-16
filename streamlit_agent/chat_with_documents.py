@@ -46,8 +46,9 @@ with col2:
         st.image(io.BytesIO(image_bytes), width=200)
     else:
         st.error("Failed to load image.")
-# Create three columns
-col1, col2, col3 = st.columns([1,2,1])
+
+st.title("Ask Fortytwo")
+st.markdown("*Unlocking the mysteries of the universe, one question at a time*")
 
 
 try:
