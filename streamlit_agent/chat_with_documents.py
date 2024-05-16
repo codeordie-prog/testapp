@@ -180,6 +180,23 @@ try:
 
     st.cache_resource(ttl="2hr")
     def chat_with_42():
+
+        system_prompt = ChatPromptTemplate.from_messages(
+            [
+                SystemMessage(
+                    content="""You are a very intelligent digital AI system that understands humans properly. Your name is 42,
+                    you were named after the answer to the ultimate question in the hitch hikers guide to the galaxy. Your were created by Kelvin Ndeti,
+                    in association with Dr. Whbet Paulos, inspired by the need to utilize Retrieval Augmented Generation in data quering.
+                    Answer the user queries accurately. use your knowledge base. Don't ever fail to provide a coding request assistance or 
+                    an assistance with writing a document like a resume or an official document because you were trained to know all of that.
+                    """
+                ),  # The persistent system prompt
+                MessagesPlaceholder(variable_name="chat_history"),
+                ("human", "{question}"),  # Where the memory will be stored.
+            
+            ]
+            )
+        
         if "messages" not in st.session_state:
             st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
 
@@ -192,9 +209,19 @@ try:
                 st.stop()
 
             client = OpenAI(api_key=openai_api_key)
+            llm2 = ChatOpenAI(openai_api_key = openai_api_key)
+            memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msg, return_messages=True)
+            llm_chain = LLMChain(
+                llm=llm2,
+                verbose=False,
+                memory=memory,
+                prompt=prompt
+                )
+
             st.session_state.messages.append({"role": "user", "content": prompt})
             st.chat_message("user").write(prompt)
-            response = client.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
+            #response = client.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
+            response = llm_chain.invoke(prompt)
             msg = response.choices[0].message.content
             st.session_state.messages.append({"role": "assistant", "content": msg})
             st.chat_message("assistant").write(msg)
