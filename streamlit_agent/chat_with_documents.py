@@ -280,7 +280,7 @@ try:
 
                 # Add download button for chat history
             if st.button("Create and download txt"):
-                create_and_download(text_content=assistant_msg)
+                create_and_download(text_content=chat_history.get_full_chat())
 
      #function-4 query documents           
     def query_documents():
