@@ -211,7 +211,7 @@ try:
                 st.stop()
 
             # Initialize OpenAI client and LLM
-            client = openai.OpenAI(api_key=openai_api_key)
+            #client = openai.OpenAI(api_key=openai_api_key)
             llm2 = ChatOpenAI(openai_api_key=openai_api_key)
 
             # Initialize Streamlit chat history
