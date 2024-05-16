@@ -200,49 +200,21 @@ try:
         if "messages" not in st.session_state:
             st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
 
-        # Display chat history messages
-        for msg in st.session_state["messages"]:
+        for msg in st.session_state.messages:
             st.chat_message(msg["role"]).write(msg["content"])
 
-        # Handle user input
-        if user_input := st.chat_input():
+        if prompt := st.chat_input():
             if not openai_api_key:
                 st.info("Please add your OpenAI API key to continue.")
                 st.stop()
 
-            # Initialize OpenAI client and LLM
-            client = openai.OpenAI(api_key=openai_api_key)
-            llm2 = ChatOpenAI(openai_api_key=openai_api_key)
-
-            # Initialize Streamlit chat history
-            chat_history = StreamlitChatMessageHistory(key="chat_history")
-
-            # Set up memory for conversation
-            memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=chat_history, return_messages=True)
-
-            # Create the LLM chain
-            llm_chain = LLMChain(
-                llm=llm2,
-                verbose=False,
-                memory=memory,
-                prompt=system_prompt
-            )
-
-            # Append user message to session state
-            st.session_state["messages"].append({"role": "user", "content": user_input})
-            st.chat_message("user").write(user_input)
-
-            # Get response from LLM chain
-            response = llm_chain.run({"question": user_input})
-            assistant_msg = response["choices"][0]["message"]["content"]
-
-            # Append assistant message to session state and display it
-            st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
-            st.chat_message("assistant").write(assistant_msg)
-
-            # Add download button for chat history
-            if st.button("Create and download txt"):
-                create_and_download(text_content=assistant_msg)
+            client = OpenAI(api_key=openai_api_key)
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            st.chat_message("user").write(prompt)
+            response = client.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
+            msg = response.choices[0].message.content
+            st.session_state.messages.append({"role": "assistant", "content": msg})
+            st.chat_message("assistant").write(msg)
      #function-4 query documents           
     def query_documents():
        
