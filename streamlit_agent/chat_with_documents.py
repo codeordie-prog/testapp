@@ -218,7 +218,7 @@ try:
             chat_history = StreamlitChatMessageHistory(key="chat_history")
 
             # Set up memory for conversation
-            memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=chat_history,chat_memory=st.session_state["messages"], return_messages=True)
+            memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=chat_history, return_messages=True)
 
             # Create the LLM chain
             llm_chain = LLMChain(
