@@ -285,19 +285,7 @@ try:
             st.info("Please upload documents to continue.")
             st.stop()
 
-        system_instruction = """The assistant shall always provide detailed answers to user queries"""
-
-        # Define your template with the system instruction
-        template = (
-            f"{system_instruction} "
-            "Combine the chat history and follow up question into "
-            "a standalone question. Chat History: {chat_history}"
-            "Follow up question: {question}"
-        )
-
-        # Create the prompt template
-        condense_question_prompt = PromptTemplate.from_template(template)
-
+        
         retriever = configure_retriever(uploaded_files)
 
         # Setup memory for contextual conversation for the documents part
