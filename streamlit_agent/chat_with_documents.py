@@ -52,16 +52,20 @@ def load_image(image_path):
     except Exception as e:
         st.error(f"Error loading image: {e}")
         return None
-    
 def img_to_base64(image_path):
+    try:
         with open(image_path, "rb") as img_file:
             return base64.b64encode(img_file.read()).decode()
-    
+    except Exception as e:
+        st.error(f"Error encoding image to base64: {e}")
+        return ""
+
 image_path = "streamlit_agent/logo/42.jfif"
 image_bytes = img_to_base64(image_path)
 
-st.sidebar.markdown(
-        f'<img src="data:image/png;base64,{image_bytes}" class="cover-glow">',
+if image_bytes:
+    st.sidebar.markdown(
+        f'<img src="data:image/jpeg;base64,{image_bytes}" class="cover-glow" width="100%">',
         unsafe_allow_html=True,
     )
 st.sidebar.markdown("---")
