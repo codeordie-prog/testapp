@@ -1,3 +1,4 @@
+import base64
 import os,io
 import tempfile
 import chat
@@ -52,8 +53,12 @@ def load_image(image_path):
         st.error(f"Error loading image: {e}")
         return None
     
+def img_to_base64(image_path):
+        with open(image_path, "rb") as img_file:
+            return base64.b64encode(img_file.read()).decode()
+    
 image_path = "streamlit_agent/logo/42.jfif"
-image_bytes = load_image(image_path)
+image_bytes = img_to_base64(image_path)
 
 st.sidebar.markdown(
         f'<img src="data:image/png;base64,{image_bytes}" class="cover-glow">',
