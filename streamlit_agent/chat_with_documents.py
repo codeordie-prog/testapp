@@ -158,16 +158,6 @@ try:
             self.status.update(state="complete")
 
 
-    #the interaction setup part
-    openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
-    if not openai_api_key:
-        st.info("Please add your OpenAI API key to continue.")
-        st.stop()
-
-    uploaded_files = st.sidebar.file_uploader(
-            label="Upload files", type=["pdf","txt","csv"], accept_multiple_files=True
-        )
-
     #chat setup
     # Setup LLM and QA chain - msg variable for chat history from streamlitchatmessagehistory
     #set up the memory with chat_memory as the msg variable -use conversational buffer memory
