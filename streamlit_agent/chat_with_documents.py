@@ -22,7 +22,7 @@ from langchain_core.runnables.history import RunnableWithMessageHistory #for cha
 
 from langchain.prompts import PromptTemplate
 
-st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
+#st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
 st.set_page_config(
     page_title="Ask FortyTwo",
     page_icon="streamlit_agent/logo/baby.jfif",
