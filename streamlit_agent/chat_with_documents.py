@@ -100,11 +100,11 @@ st.markdown(
 
 
 # Display the image in the center column
-with col1:
-    if image_bytes:
-        st.image(io.BytesIO(image_bytes), width=200)
-    else:
-        st.error("Failed to load image.")
+#with col1:
+    ##if image_bytes:
+       # st.image(io.BytesIO(image_bytes), width=200)
+   # else:
+    #    st.error("Failed to load image.")
 
 st.markdown("*Unlocking the mysteries of the universe, one question at a time*")
 
