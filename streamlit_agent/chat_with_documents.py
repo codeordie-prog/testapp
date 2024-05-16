@@ -46,7 +46,7 @@ with col2:
         st.image(io.BytesIO(image_bytes), width=400)
     else:
         st.error("Failed to load image.")
-
+st.title("Forty Two")
 st.markdown("*Unlocking the mysteries of the universe, one question at a time*")
 
 
