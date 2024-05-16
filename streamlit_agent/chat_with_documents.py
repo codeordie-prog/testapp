@@ -34,7 +34,7 @@ def load_image(image_path):
         st.error(f"Error loading image: {e}")
         return None
     
-image_path = "streamlit_agent/logo/rob.jpg"
+image_path = "streamlit_agent/logo/42.jpg"
 image_bytes = load_image(image_path)
 
 # Create three columns
