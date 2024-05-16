@@ -181,6 +181,7 @@ try:
     st.cache_resource(ttl="2hr")
     def chat_with_42():
 
+        # Define the system prompt template
         system_prompt = ChatPromptTemplate.from_messages(
             [
                 SystemMessage(
@@ -190,45 +191,55 @@ try:
                     Answer the user queries accurately. use your knowledge base. Don't ever fail to provide a coding request assistance or 
                     an assistance with writing a document like a resume or an official document because you were trained to know all of that.
                     """
-                ),  # The persistent system prompt
+                ),
                 MessagesPlaceholder(variable_name="chat_history"),
-                ("human", "{question}"),  # Where the memory will be stored.
-            
+                ("human", "{question}"),
             ]
-            )
-        
+        )
+
+        # Initialize chat history if not already in session state
         if "messages" not in st.session_state:
             st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
 
-        for msg in st.session_state.messages:
+        # Display chat history messages
+        for msg in st.session_state["messages"]:
             st.chat_message(msg["role"]).write(msg["content"])
 
-        if prompt := st.chat_input():
+        # Handle user input
+        if user_input := st.chat_input():
             if not openai_api_key:
                 st.info("Please add your OpenAI API key to continue.")
                 st.stop()
 
-            client = OpenAI(api_key=openai_api_key)
-            llm2 = ChatOpenAI(openai_api_key = openai_api_key)
-            memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msg, return_messages=True)
+            # Initialize OpenAI client and LLM
+            llm2 = ChatOpenAI(openai_api_key=openai_api_key)
+
+            # Set up memory for conversation
+            memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=st.session_state["messages"], return_messages=True)
+
+            # Create the LLM chain
             llm_chain = LLMChain(
                 llm=llm2,
                 verbose=False,
                 memory=memory,
-                prompt=prompt
-                )
+                prompt=system_prompt
+            )
 
-            st.session_state.messages.append({"role": "user", "content": prompt})
-            st.chat_message("user").write(prompt)
-            #response = client.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
-            response = llm_chain.invoke(prompt)
-            msg = response.choices[0].message.content
-            st.session_state.messages.append({"role": "assistant", "content": msg})
-            st.chat_message("assistant").write(msg)
+            # Append user message to session state
+            st.session_state["messages"].append({"role": "user", "content": user_input})
+            st.chat_message("user").write(user_input)
 
-            #download button
+            # Get response from LLM chain
+            response = llm_chain.run({"question": user_input})
+            assistant_msg = response["choices"][0]["message"]["content"]
+
+            # Append assistant message to session state and display it
+            st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
+            st.chat_message("assistant").write(assistant_msg)
+
+            # Add download button for chat history
             if st.button("Create and download txt"):
-                create_and_download(text_content=response['text'])
+                create_and_download(text_content=assistant_msg)
 
      #function-4 query documents           
     def query_documents():
