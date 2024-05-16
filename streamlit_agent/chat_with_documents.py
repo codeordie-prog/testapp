@@ -34,7 +34,7 @@ def load_image(image_path):
         st.error(f"Error loading image: {e}")
         return None
     
-image_path = "./logo/mini.jpg"
+image_path = "streamlit_agent/logo/mini.jpg"
 image_bytes = load_image(image_path)
 
 # Create three columns
@@ -49,8 +49,7 @@ with col2:
 # Create three columns
 col1, col2, col3 = st.columns([1,2,1])
 
-with col2:
-    st.image("./logo/mini.jpg", width=450)
+
 try:
     
     class StreamHandler(BaseCallbackHandler):
