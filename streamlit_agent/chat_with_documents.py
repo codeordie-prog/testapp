@@ -55,6 +55,12 @@ def load_image(image_path):
 image_path = "streamlit_agent/logo/42.jfif"
 image_bytes = load_image(image_path)
 
+st.sidebar.markdown(
+        f'<img src="data:image/png;base64,{image_bytes}" class="cover-glow">',
+        unsafe_allow_html=True,
+    )
+st.sidebar.markdown("---")
+
 # Create three columns
 col1, col2, col3 = st.columns([1, 2, 1])
 
