@@ -1,4 +1,4 @@
-import os
+import os,io
 import tempfile
 import chat
 import streamlit as st
@@ -24,6 +24,28 @@ from langchain.prompts import PromptTemplate
 
 st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
 
+
+# Load the image
+def load_image(image_path):
+    try:
+        with open(image_path, "rb") as image_file:
+            return image_file.read()
+    except Exception as e:
+        st.error(f"Error loading image: {e}")
+        return None
+    
+image_path = "./logo/mini.jpg"
+image_bytes = load_image(image_path)
+
+# Create three columns
+col1, col2, col3 = st.columns([1, 2, 1])
+
+# Display the image in the center column
+with col2:
+    if image_bytes:
+        st.image(io.BytesIO(image_bytes), width=450)
+    else:
+        st.error("Failed to load image.")
 # Create three columns
 col1, col2, col3 = st.columns([1,2,1])
 
