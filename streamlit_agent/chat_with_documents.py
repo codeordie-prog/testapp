@@ -204,9 +204,6 @@ try:
         for msg in st.session_state["messages"]:
             st.chat_message(msg["role"]).write(msg["content"])
 
-        if len(msg.messages) == 0 or st.sidebar.button("Clear chat_with_42 message history"):
-            msg.clear()
-            msg.add_ai_message("Hey carbon entity, lets talk!")
         # Handle user input
         if user_input := st.chat_input():
             if not openai_api_key:
