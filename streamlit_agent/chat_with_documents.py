@@ -56,6 +56,19 @@ def load_image(image_path):
 imag_path = "streamlit_agent/logo/42.jfif"
 image_bytes = load_image(imag_path)
 
+# Create two columns
+col1, col2,col3= st.columns([1, 2,1])
+
+#Display the image in the center column
+with col1:
+    if image_bytes:
+       st.image(io.BytesIO(image_bytes), width=200)
+    else:
+      st.error("Failed to load image.")
+
+st.title("Ask FortyTwo")
+st.markdown("*Unlocking the mysteries of the universe, one question at a time*")
+
 # Input for OpenAI API key in the sidebar
 openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 if not openai_api_key:
@@ -92,21 +105,6 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-
-# Create two columns
-col1, col2,col3= st.columns([1, 2,1])
-
-#
-
-#Display the image in the center column
-with col1:
-    if image_bytes:
-       st.image(io.BytesIO(image_bytes), width=200)
-    else:
-      st.error("Failed to load image.")
-
-st.title("Ask FortyTwo")
-st.markdown("*Unlocking the mysteries of the universe, one question at a time*")
 
 
 try:
