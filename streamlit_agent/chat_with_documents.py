@@ -278,9 +278,9 @@ try:
             st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
             st.chat_message("assistant").write(assistant_msg)
 
-            # Add download button for chat history
-            if st.button("Create and download txt"):
-                create_and_download(text_content=assistant_msg)
+        # Add download button for chat history
+        if st.button("Create and download txt"):
+            create_and_download(text_content=assistant_msg)
 
      #function-4 query documents           
     def query_documents():
