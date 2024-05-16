@@ -180,7 +180,6 @@ try:
 
     st.cache_resource(ttl="2hr")
     def chat_with_42():
-
         # Define the system prompt template
         system_prompt = ChatPromptTemplate.from_messages(
             [
@@ -212,9 +211,10 @@ try:
                 st.stop()
 
             # Initialize OpenAI client and LLM
+            client = openai.OpenAI(api_key=openai_api_key)
             llm2 = ChatOpenAI(openai_api_key=openai_api_key)
 
-             # Initialize Streamlit chat history
+            # Initialize Streamlit chat history
             chat_history = StreamlitChatMessageHistory(key="chat_history")
 
             # Set up memory for conversation
@@ -243,7 +243,6 @@ try:
             # Add download button for chat history
             if st.button("Create and download txt"):
                 create_and_download(text_content=assistant_msg)
-
      #function-4 query documents           
     def query_documents():
        
