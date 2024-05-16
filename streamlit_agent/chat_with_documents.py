@@ -214,8 +214,11 @@ try:
             # Initialize OpenAI client and LLM
             llm2 = ChatOpenAI(openai_api_key=openai_api_key)
 
+             # Initialize Streamlit chat history
+            chat_history = StreamlitChatMessageHistory(key="chat_history")
+
             # Set up memory for conversation
-            memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=st.session_state["messages"], return_messages=True)
+            memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=chat_history,chat_memory=st.session_state["messages"], return_messages=True)
 
             # Create the LLM chain
             llm_chain = LLMChain(
