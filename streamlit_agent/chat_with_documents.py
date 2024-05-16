@@ -179,60 +179,24 @@ try:
 
     st.cache_resource(ttl="2hr")
     def chat_with_42():
-        msgs2 = StreamlitChatMessageHistory(key="chat_history")
-        memory2 = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs2, return_messages=True)
-        llm2 = ChatOpenAI(
-            model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
-        )
+        if "messages" not in st.session_state:
+            st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
 
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                SystemMessage(
-                    content="""You are a very intelligent digital AI system that understands humans properly. Your name is 42,
-                    you were named after the answer to the ultimate question in the hitch hikers guide to the galaxy. Your were created by Kelvin Ndeti,
-                    in association with Dr. Whbet Paulos, inspired by the need to utilize Retrieval Augmented Generation in data quering.
-                    Answer the user queries accurately. use your knowledge base. Don't ever fail to provide a coding request assistance or 
-                    an assistance with writing a document like a resume or an official document because you were trained to know all of that.
-                    """
-                ),  # The persistent system prompt
-                MessagesPlaceholder(variable_name="chat_history"),
-                ("human", "{question}"),  # Where the memory will be stored.
-            
-            ]
-            )
-        
-        llm_chain = LLMChain(
-        llm=llm2,
-        verbose=False,
-        memory=memory2,
-        prompt=prompt
-        )
+        for msg in st.session_state.messages:
+            st.chat_message(msg["role"]).write(msg["content"])
 
-        #chain with history
-        chain_with_history = RunnableWithMessageHistory(
-        llm_chain,
-        lambda session_id: msgs2,  # Always return the instance created earlier
-        input_messages_key="question",
-        history_messages_key="chat_history"
-        )
+        if prompt := st.chat_input():
+            if not openai_api_key:
+                st.info("Please add your OpenAI API key to continue.")
+                st.stop()
 
-        if len(msgs2.messages) == 0 or st.sidebar.button("Clear chat_with_42 message history"):
-            msgs2.clear()
-            msgs2.add_ai_message("Hey carbon entity, lets talk!")
-
-        if chat_query := st.text_input("Chat with 42, let's chat. enter query : "):
-
-            for msg in msgs2.messages:
-                st.chat_message(msg.type).write(msg.content)
-
-            if prompt := st.chat_input():
-                st.chat_message("human").write(prompt)
-
-            #configure session id
-            config = {"configurable": {"session_id": "any"},}
-            response = chain_with_history.invoke({"question" : chat_query},config=config)
-            # response = llm_chain.invoke(chat_query)
-            st.write("response: ",response["text"])
+            client = ChatOpenAI(api_key=openai_api_key)
+            st.session_state.messages.append({"role": "user", "content": prompt})
+            st.chat_message("user").write(prompt)
+            response = client.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
+            msg = response.choices[0].message.content
+            st.session_state.messages.append({"role": "assistant", "content": msg})
+            st.chat_message("assistant").write(msg)
 
             #download button
             if st.button("Create and download txt"):
