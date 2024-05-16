@@ -3,6 +3,7 @@ import tempfile
 import chat
 import streamlit as st
 from io import BytesIO
+from openai import OpenAI
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader
 from langchain.memory import ConversationBufferMemory
@@ -190,7 +191,7 @@ try:
                 st.info("Please add your OpenAI API key to continue.")
                 st.stop()
 
-            client = ChatOpenAI(api_key=openai_api_key)
+            client = OpenAI(api_key=openai_api_key)
             st.session_state.messages.append({"role": "user", "content": prompt})
             st.chat_message("user").write(prompt)
             response = client.chat.completions.create(model="gpt-3.5-turbo", messages=st.session_state.messages)
