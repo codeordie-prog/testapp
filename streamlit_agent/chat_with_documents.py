@@ -23,6 +23,24 @@ from langchain_core.runnables.history import RunnableWithMessageHistory #for cha
 from langchain.prompts import PromptTemplate
 
 st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
+st.set_page_config(
+    page_title="Ask FortyTwo",
+    page_icon="streamlit_agent/logo/baby.jfif",
+    layout="wide",
+    initial_sidebar_state="expanded",
+    menu_items={
+        "Get help": "https://github.com/codeordie-prog/testapp/blob/master/streamlit_agent/chat_with_documents.py",
+        "Report a bug": "https://github.com/codeordie-prog/testapp/blob/master/streamlit_agent/chat_with_documents.py",
+        "About": """
+            ## Ask FortyTwo
+            
+            **GitHub**: https://github.com/codeordie-prog
+            
+            The AI Assistant named, 42, utilizes RAG to answer queries about your documents in `.pdf`,`.txt`, or `.csv` format,
+            participate in general chat sessions.
+        """
+    }
+)
 
 
 # Load the image
