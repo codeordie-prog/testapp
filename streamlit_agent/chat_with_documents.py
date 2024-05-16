@@ -40,6 +40,32 @@ image_bytes = load_image(image_path)
 # Create three columns
 col1, col2, col3 = st.columns([1, 2, 1])
 
+# Inject custom CSS for glowing border effect
+st.markdown(
+        """
+        <style>
+        .cover-glow {
+            width: 100%;
+            height: auto;
+            padding: 3px;
+            box-shadow: 
+                0 0 5px #330000,
+                0 0 10px #660000,
+                0 0 15px #990000,
+                0 0 20px #CC0000,
+                0 0 25px #FF0000,
+                0 0 30px #FF3333,
+                0 0 35px #FF6666;
+            position: relative;
+            z-index: -1;
+            border-radius: 30px;  /* Rounded corners */
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+
 # Display the image in the center column
 with col1:
     if image_bytes:
