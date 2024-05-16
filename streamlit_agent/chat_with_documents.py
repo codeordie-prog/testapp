@@ -314,9 +314,7 @@ try:
             llm, 
             retriever=retriever, 
             memory=memory, 
-            verbose=True, 
-            condense_question_prompt=condense_question_prompt,
-            chain_type="stuff",
+            verbose=True
         )
 
         if len(msgs.messages) == 0 or st.sidebar.button("Clear message history"):
