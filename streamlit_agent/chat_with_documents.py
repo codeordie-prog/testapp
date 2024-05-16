@@ -251,6 +251,10 @@ try:
             # Initialize Streamlit chat history
             chat_history = StreamlitChatMessageHistory(key="chat_history")
 
+            if len(chat_history.messages) == 0 or st.sidebar.button("Clear chat_with_42 message history"):
+                chat_history.clear()
+                chat_history.add_ai_message("Hey carbon entity, lets talk!")
+
             # Set up memory for conversation
             memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=chat_history, return_messages=True)
 
