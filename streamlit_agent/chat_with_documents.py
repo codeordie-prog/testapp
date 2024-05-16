@@ -204,14 +204,16 @@ try:
         for msg in st.session_state["messages"]:
             st.chat_message(msg["role"]).write(msg["content"])
 
+        if len(msg.messages) == 0 or st.sidebar.button("Clear chat_with_42 message history"):
+            msg.clear()
+            msg.add_ai_message("Hey carbon entity, lets talk!")
         # Handle user input
         if user_input := st.chat_input():
             if not openai_api_key:
                 st.info("Please add your OpenAI API key to continue.")
                 st.stop()
 
-            # Initialize OpenAI client and LLM
-            #client = openai.OpenAI(api_key=openai_api_key)
+            # Initialize OpenAI LLM
             llm2 = ChatOpenAI(openai_api_key=openai_api_key)
 
             # Initialize Streamlit chat history
@@ -243,6 +245,7 @@ try:
             # Add download button for chat history
             if st.button("Create and download txt"):
                 create_and_download(text_content=assistant_msg)
+
      #function-4 query documents           
     def query_documents():
        
