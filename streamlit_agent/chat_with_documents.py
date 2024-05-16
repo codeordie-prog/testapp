@@ -26,7 +26,7 @@ from langchain.prompts import PromptTemplate
 #st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
 st.set_page_config(
     page_title="Ask FortyTwo",
-    page_icon="streamlit_agent/logo/baby.jfif",
+    page_icon="👽",
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
@@ -53,6 +53,8 @@ def load_image(image_path):
         st.error(f"Error loading image: {e}")
         return None
 
+imag_path = "streamlit_agent/logo/42.jfif"
+image_bytes = load_image(imag_path)
 
 # Input for OpenAI API key in the sidebar
 openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
@@ -91,18 +93,19 @@ st.markdown(
 )
 
 
-# Create three columns
-col1, col2, col3 = st.columns([1, 2, 1])
+# Create two columns
+col1, col2= st.columns([1, 2])
 
 #
 
-# Display the image in the center column
-#with col1:
-    ##if image_bytes:
-       # st.image(io.BytesIO(image_bytes), width=200)
-   # else:
-    #    st.error("Failed to load image.")
+#Display the image in the center column
+with col1:
+    if image_bytes:
+       st.image(io.BytesIO(image_bytes), width=200)
+    else:
+      st.error("Failed to load image.")
 
+st.title("Ask FortyTwo")
 st.markdown("*Unlocking the mysteries of the universe, one question at a time*")
 
 
