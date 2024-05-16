@@ -234,7 +234,7 @@ try:
 
             # Get response from LLM chain
             response = llm_chain.run({"question": user_input})
-            assistant_msg = response["text"]  # Adjusted to fetch text from the response
+            assistant_msg = response  # Adjusted to fetch text from the response
 
             # Append assistant message to session state and display it
             st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
