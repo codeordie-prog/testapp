@@ -342,14 +342,10 @@ try:
     #function-4 query documents           
     def query_documents():
         
-            if not uploaded_files and not url:
+            if not uploaded_files:
                 st.info("Please upload documents or add url to continue.")
                 st.stop()
 
-            elif uploaded_files:
-
-                retriever = configure_retriever(uploaded_files)
-               
 
             else:
 
