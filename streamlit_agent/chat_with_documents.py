@@ -415,7 +415,7 @@ try:
 
 
            
-            user_query = st.chat_input(placeholder="Ask me about the website!"):
+            user_query = st.chat_input(placeholder="Ask me about the website!")
             st.chat_message("user").write(user_query)
 
             with st.chat_message("ai"):
