@@ -100,7 +100,7 @@ try:
         label="Upload files", type=["pdf", "txt", "csv"], accept_multiple_files=True
     )
 
-    #url = st.sidebar.text_input("Enter url to query")
+    url = st.sidebar.text_input("Enter url to query")
 
     # Inject custom CSS for glowing border effect
     st.markdown(
@@ -386,6 +386,52 @@ try:
                     retrieval_handler = PrintRetrievalHandler(st.container())
                     stream_handler = StreamHandler(st.empty())
                     qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+
+
+    def query_website():
+
+        try:
+            if not url:
+                st.info("please enter url to query")
+                st.stop()
+
+            retriever = scrape_web_page(url)
+
+            msgs = StreamlitChatMessageHistory()
+            memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
+
+            llm_model = st.sidebar.selectbox("Choose LLM model",
+                                    ("gpt-3.5-turbo","gpt-4","gpt-4o"))
+            # Setup LLM and QA chain for the documents part
+            llm = ChatOpenAI(
+                model_name=llm_model, openai_api_key=openai_api_key, temperature=0, streaming=True
+            )
+
+
+            qa_chain = ConversationalRetrievalChain.from_llm(
+                llm, 
+                retriever=retriever, 
+                memory=memory, 
+                verbose=True
+            )
+
+
+            avatars = {"human": "user", "ai": "assistant"}
+            for msg in msgs.messages:
+                st.chat_message(avatars[msg.type]).write(msg.content)
+            
+            st.markdown("Document query section. Utilize RAG you curious being.")
+            if user_query := st.chat_input(placeholder="Ask me about the website!"):
+                st.chat_message("user").write(user_query)
+
+                with st.chat_message("ai"):
+                    retrieval_handler = PrintRetrievalHandler(st.container())
+                    stream_handler = StreamHandler(st.empty())
+                    qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+        except Exception:
+            pass
+
+
 
        
     #--------------------------------------------------------------main function------------------------------------------------------------------#
