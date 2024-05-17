@@ -395,6 +395,7 @@ try:
                 st.info("please enter url to query")
                 st.stop()
 
+            prompt = hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
             retriever = scrape_web_page(url)
 
             msgs = StreamlitChatMessageHistory()
@@ -408,11 +409,8 @@ try:
             )
 
 
-            qa_chain = ConversationalRetrievalChain.from_llm(
-                llm, 
-                retriever=retriever, 
-                memory=memory, 
-                verbose=True
+            qa_chain = RetrievalQA.from_chain_type(
+                llm, retriever=retriever, chain_type_kwargs={"prompt": prompt}
             )
 
 
@@ -427,7 +425,8 @@ try:
                 with st.chat_message("ai"):
                     retrieval_handler = PrintRetrievalHandler(st.container())
                     stream_handler = StreamHandler(st.empty())
-                    qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+                    result = qa_chain({"query": user_query})
+                    st.write(result)
         except Exception:
             pass
 
