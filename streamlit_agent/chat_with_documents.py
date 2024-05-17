@@ -380,7 +380,7 @@ try:
                                 memory=memory, 
                                 verbose=True
                             )
-                        
+                        st.write("coming from wiki")
                         qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
 
 
