@@ -414,15 +414,11 @@ try:
             )
 
 
-            avatars = {"human": "user", "ai": "assistant"}
-            for msg in msgs.messages:
-                st.chat_message(avatars[msg.type]).write(msg.content)
-            
-            st.markdown("Document query section. Utilize RAG you curious being.")
-            if user_query := st.chat_input(placeholder="Ask me about the website!"):
-                st.chat_message("user").write(user_query)
+           
+            user_query = st.chat_input(placeholder="Ask me about the website!"):
+            st.chat_message("user").write(user_query)
 
-                with st.chat_message("ai"):
+            with st.chat_message("ai"):
                     retrieval_handler = PrintRetrievalHandler(st.container())
                     stream_handler = StreamHandler(st.empty())
                     result = qa_chain({"query": user_query})
