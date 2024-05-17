@@ -96,8 +96,8 @@ if not openai_api_key:
     st.stop()
 
 #model choice section
-llm_model = st.sidebar.selectbox("Chhose LLM model",
-                                 ("gpt-3.5-turbo","gpt-4","gpt-4-omni"))
+llm_model = st.sidebar.selectbox("Choose LLM model",
+                                 ("gpt-3.5-turbo","gpt-4","gpt-4o"))
 # File uploader in the sidebar
 uploaded_files = st.sidebar.file_uploader(
     label="Upload files", type=["pdf", "txt", "csv"], accept_multiple_files=True
@@ -283,7 +283,7 @@ try:
                 st.stop()
 
             # Initialize OpenAI LLM
-            llm2 = ChatOpenAI(openai_api_key=openai_api_key)
+            llm2 = ChatOpenAI(openai_api_key=openai_api_key, model_name = llm_model)
 
             # Initialize Streamlit chat history
             chat_history = StreamlitChatMessageHistory(key="chat_history")
@@ -334,7 +334,7 @@ try:
 
         # Setup LLM and QA chain for the documents part
         llm = ChatOpenAI(
-            model_name="gpt-3.5-turbo", openai_api_key=openai_api_key, temperature=0, streaming=True
+            model_name=llm_model, openai_api_key=openai_api_key, temperature=0, streaming=True
         )
 
 
