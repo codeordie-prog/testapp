@@ -309,8 +309,10 @@ try:
             st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
             st.chat_message("assistant").write(assistant_msg)
 
-            if st.sidebar.button("download chat"):
-               create_and_download(text_content=response['text'])
+            # Download chat button
+            if st.sidebar.button("Download Chat"):
+                all_messages = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
+                create_and_download(text_content=all_messages)
 
 #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
  
