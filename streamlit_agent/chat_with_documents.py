@@ -88,6 +88,14 @@ if not openai_api_key:
     st.info("Please add your OpenAI API key to continue.")
     st.stop()
 
+
+#--------sidebar about section------------
+st.sidebar.subheader("About")
+st.sidebar.info("""
+    This app allows you to choose from different language models.
+    You can also find instructions on how to use the app below.
+""")
+
 # File uploader in the sidebar
 uploaded_files = st.sidebar.file_uploader(
     label="Upload files", type=["pdf", "txt", "csv"], accept_multiple_files=True
