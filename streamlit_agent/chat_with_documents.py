@@ -84,6 +84,8 @@ st.markdown('<h1 class="title">Ask FortyTwo</h1>', unsafe_allow_html=True)
 
 #--------sidebar about section------------#
 
+st.sidebar.title("Ask FortyTwo")
+
 st.sidebar.subheader("About")
 st.sidebar.info("""
     42 named after the Hitch Hiker's Guide to the Galaxy answer to the ultimate question of life,
