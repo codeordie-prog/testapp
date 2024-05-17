@@ -396,9 +396,6 @@ try:
             prompt = hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
             retriever = scrape_web_page(url)
 
-            msgs = StreamlitChatMessageHistory()
-            memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
-
             llm_model = st.sidebar.selectbox("Choose LLM model",
                                     ("gpt-3.5-turbo","gpt-4","gpt-4o"))
             # Setup LLM and QA chain for the documents part
