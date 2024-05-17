@@ -100,7 +100,6 @@ try:
         label="Upload files", type=["pdf", "txt", "csv"], accept_multiple_files=True
     )
 
-    wikipedia = st.checkbox("Reference from wikipedia")
 
     # Inject custom CSS for glowing border effect
     st.markdown(
@@ -371,18 +370,6 @@ try:
                 with st.chat_message("ai"):
                     retrieval_handler = PrintRetrievalHandler(st.container())
                     stream_handler = StreamHandler(st.empty())
-
-                    if wikipedia :
-                        retriever2 = WikipediaRetriever()
-                        qa_chain = ConversationalRetrievalChain.from_llm(
-                                llm, 
-                                retriever=retriever2, 
-                                memory=memory, 
-                                verbose=True
-                            )
-                        st.write("coming from wiki")
-                        qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
-
 
                     qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
 
