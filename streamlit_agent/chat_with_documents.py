@@ -66,32 +66,24 @@ with col2:
     else:
       st.error("Failed to load image.")
 
-# Custom CSS to center the title
-st.markdown(
-    """
-    <style>
-    .title {
-        text-align: center;
-    }
-    </style>
-    """,
-    unsafe_allow_html=True
-)
-
-# Use the custom CSS class for the title
-st.markdown('<h1 class="title">Ask FortyTwo</h1>', unsafe_allow_html=True)
 
 
 #--------sidebar about section------------#
 
 st.sidebar.title("Ask FortyTwo")
-
 st.sidebar.subheader("About")
 st.sidebar.info("""
     42 named after the Hitch Hiker's Guide to the Galaxy answer to the ultimate question of life,
     is a smart bot that utilizes Retrieval Augmented Generation to query uploaded documents in the format `.pdf`,`.csv` and `.txt`.
     42 also has a chat section where users can chat with the bot without uploading the documents.
 """)
+
+#-------sidebar instructions section------#
+st.sidebar.subheader("Get an openAI API key")
+st.sidebar.info("""
+1. Go to [OpenAI API Keys](https://platform.openai.com/account/api-keys).
+2. Click on the `+ Create new secret key` button.
+3. Next, enter an identifier name (optional) and click on the `Create secret key` button.""")
 
 
 # Input for OpenAI API key in the sidebar
