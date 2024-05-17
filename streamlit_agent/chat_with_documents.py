@@ -19,7 +19,7 @@ from langchain.chains import LLMChain
 from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate,MessagesPlaceholder
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory #for chain with history
-from langchain_community.document_loaders import AsyncHtmlLoader
+from langchain_text_splitters import CharacterTextSplitter
 import requests
 
 
@@ -328,7 +328,7 @@ try:
        loader = WebBaseLoader(url)
        data = loader.load()
 
-       splitter = RecursiveCharacterTextSplitter(chunk_size = 1500, chunk_overlap=200)
+       splitter = CharacterTextSplitter(chunk_size = 1500, chunk_overlap=200)
        splits = splitter.split_documents(data)
        embedding = OpenAIEmbeddings()
        vector_db = Chroma.from_documents(splits,embedding)
