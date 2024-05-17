@@ -12,14 +12,14 @@ from langchain_community.chat_message_histories import (
 )
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.callbacks.base import BaseCallbackHandler
-from langchain.chains import ConversationalRetrievalChain
+from langchain.chains import ConversationalRetrievalChain,RetrievalQA
 from langchain.vectorstores import DocArrayInMemorySearch, Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter,CharacterTextSplitter
 from langchain.chains import LLMChain
 from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate,MessagesPlaceholder
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory #for chain with history
-import requests
+from langchain import hub
 
 
 #--------------------------------------st.set_page_config--------------------------------------------------------------------------#
@@ -278,6 +278,7 @@ try:
                                     ("gpt-3.5-turbo","gpt-4","gpt-4o"))
             
             try:
+                
                 # Handle user input
                 if user_input := st.chat_input():
                     if not openai_api_key:
@@ -305,9 +306,17 @@ try:
                     st.session_state["messages"].append({"role": "user", "content": user_input})
                     st.chat_message("user").write(user_input)
 
-                    # Get response from LLM chain
+                    if url:
+                        prompt = hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
+                        retriever2 = scrape_web_page(url)
+                        response = RetrievalQA.from_chain_type( 
+                        llm2, retriever=retriever2, chain_type_kwargs={"prompt": prompt}
+                         )
+                                        # Get response from LLM chain
                     response = llm_chain.run({"question": user_input})
                     assistant_msg = response  # Adjusted to fetch text from the response
+
+                    
 
                     # Append assistant message to session state and display it
                     st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
@@ -327,7 +336,7 @@ try:
        loader = WebBaseLoader(url)
        data = loader.load()
 
-       splitter = CharacterTextSplitter(chunk_size = 1500, chunk_overlap=200)
+       splitter = RecursiveCharacterTextSplitter(chunk_size = 1500, chunk_overlap=200)
        splits = splitter.split_documents(data)
        embedding = OpenAIEmbeddings()
        vector_db = Chroma.from_documents(splits,embedding)
@@ -346,11 +355,7 @@ try:
                 st.info("Please upload documents or add url to continue.")
                 st.stop()
 
-
-            else:
-
-                retriever = scrape_web_page(url)
-
+            retriever = configure_retriever(uploaded_files)
             # Setup memory for contextual conversation for the documents part
             msgs = StreamlitChatMessageHistory()
             memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
