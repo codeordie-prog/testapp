@@ -418,11 +418,9 @@ try:
             user_query = st.chat_input(placeholder="Ask me about the website!")
             st.chat_message("user").write(user_query)
 
-            with st.chat_message("ai"):
-                    retrieval_handler = PrintRetrievalHandler(st.container())
-                    stream_handler = StreamHandler(st.empty())
-                    result = qa_chain({"query": user_query})
-                    st.write(result)
+            
+            result = qa_chain({"query": user_query})
+            st.write(result)
         except Exception:
             pass
 
