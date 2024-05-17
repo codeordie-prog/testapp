@@ -276,46 +276,48 @@ try:
             llm_model = st.sidebar.selectbox("Choose LLM model",
                                     ("gpt-3.5-turbo","gpt-4","gpt-4o"))
             
-            # Handle user input
-            if user_input := st.chat_input():
-                if not openai_api_key:
-                    st.info("Please add your OpenAI API key to continue.")
-                    st.stop()
+            try:
+                # Handle user input
+                if user_input := st.chat_input():
+                    if not openai_api_key:
+                        st.info("Please add your OpenAI API key to continue.")
+                        st.stop()
 
-                # Initialize OpenAI LLM
-                llm2 = ChatOpenAI(openai_api_key=openai_api_key, model = llm_model)
+                    # Initialize OpenAI LLM
+                    llm2 = ChatOpenAI(openai_api_key=openai_api_key, model = llm_model)
 
-                # Initialize Streamlit chat history
-                chat_history = StreamlitChatMessageHistory(key="chat_history")
+                    # Initialize Streamlit chat history
+                    chat_history = StreamlitChatMessageHistory(key="chat_history")
 
-                # Set up memory for conversation
-                memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=chat_history, return_messages=True)
+                    # Set up memory for conversation
+                    memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=chat_history, return_messages=True)
 
-                # Create the LLM chain
-                llm_chain = LLMChain(
-                    llm=llm2,
-                    verbose=False,
-                    memory=memory,
-                    prompt=system_prompt
-                )
+                    # Create the LLM chain
+                    llm_chain = LLMChain(
+                        llm=llm2,
+                        verbose=False,
+                        memory=memory,
+                        prompt=system_prompt
+                    )
 
-                # Append user message to session state
-                st.session_state["messages"].append({"role": "user", "content": user_input})
-                st.chat_message("user").write(user_input)
+                    # Append user message to session state
+                    st.session_state["messages"].append({"role": "user", "content": user_input})
+                    st.chat_message("user").write(user_input)
 
-                # Get response from LLM chain
-                response = llm_chain.run({"question": user_input})
-                assistant_msg = response  # Adjusted to fetch text from the response
+                    # Get response from LLM chain
+                    response = llm_chain.run({"question": user_input})
+                    assistant_msg = response  # Adjusted to fetch text from the response
 
-                # Append assistant message to session state and display it
-                st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
-                st.chat_message("assistant").write(assistant_msg)
+                    # Append assistant message to session state and display it
+                    st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
+                    st.chat_message("assistant").write(assistant_msg)
 
-                # Download chat button
-                if st.sidebar.button("Download Chat"):
-                    all_messages = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
-                    create_and_download(text_content=all_messages)
-
+                    # Download chat button
+                    if st.sidebar.button("Download Chat"):
+                        all_messages = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
+                        create_and_download(text_content=all_messages)
+            except Exception:
+                st.write("an Error occured check the key")
     #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
     
     #function-4 query documents           
