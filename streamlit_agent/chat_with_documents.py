@@ -340,12 +340,17 @@ try:
     #function-4 query documents           
     def query_documents():
         
-            if not uploaded_files:
-                st.info("Please upload documents to continue.")
+            if not uploaded_files and not url:
+                st.info("Please upload documents or add url to continue.")
                 st.stop()
 
-            
-            retriever = configure_retriever(uploaded_files)
+            if uploaded_files:
+
+                retriever = configure_retriever(uploaded_files)
+
+            if url:
+
+                retriever = web_scraping_query(url)
 
             # Setup memory for contextual conversation for the documents part
             msgs = StreamlitChatMessageHistory()
