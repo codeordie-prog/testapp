@@ -344,11 +344,11 @@ try:
                 st.info("Please upload documents or add url to continue.")
                 st.stop()
 
-            if uploaded_files:
+            elif uploaded_files:
 
                 retriever = configure_retriever(uploaded_files)
 
-            if url:
+            else:
 
                 retriever = web_scraping_query(url)
 
