@@ -356,7 +356,7 @@ try:
 
             else:
 
-                retriever = web_scraping_query(url)
+                retriever = scrape_web_page(url)
 
             # Setup memory for contextual conversation for the documents part
             msgs = StreamlitChatMessageHistory()
