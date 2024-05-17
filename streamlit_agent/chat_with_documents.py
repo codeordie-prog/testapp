@@ -20,8 +20,7 @@ from langchain.chains import LLMChain
 from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate,MessagesPlaceholder
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory #for chain with history
-
-from langchain.prompts import PromptTemplate
+from langchain_community.document_loaders import AsyncHtmlLoader
 
 #--------------------------------------st.set_page_config--------------------------------------------------------------------------#
 
@@ -101,6 +100,7 @@ try:
         label="Upload files", type=["pdf", "txt", "csv"], accept_multiple_files=True
     )
 
+    url = st.sidebar.text_input("Enter url to query")
     # Inject custom CSS for glowing border effect
     st.markdown(
         """
@@ -318,8 +318,25 @@ try:
                         create_and_download(text_content=all_messages)
             except Exception:
                 st.write("an Error occured please enter a valid OpenAI API key")
+
     #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
     
+    #webscraping function
+    def web_scraping_query(url : str):
+        
+        loader = AsyncHtmlLoader(url)
+        docs = loader.load()
+        text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1500, chunk_overlap = 200)
+        splits = text_splitter(docs)
+
+        embedding = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+        vector_db = DocArrayInMemorySearch.from_documents(splits,embedding)
+        retriever = vector_db.as_retriever()
+
+        return retriever
+
+        
+         
     #function-4 query documents           
     def query_documents():
         
@@ -365,8 +382,8 @@ try:
                     retrieval_handler = PrintRetrievalHandler(st.container())
                     stream_handler = StreamHandler(st.empty())
                     qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
-                
-                
+
+       
     #--------------------------------------------------------------main function------------------------------------------------------------------#
     def main():
 
