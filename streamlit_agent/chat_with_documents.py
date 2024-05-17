@@ -440,6 +440,9 @@ try:
             if uploaded_files:
             
                 query_documents()
+
+            elif url:
+                query_website()
             else:
                 chat_with_42()
 
