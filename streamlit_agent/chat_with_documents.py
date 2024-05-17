@@ -411,10 +411,6 @@ try:
                 llm, retriever=retriever, chain_type_kwargs={"prompt": prompt}
             )
 
-
-            st.chat_message("user").write(user_query)
-
-            
             result = qa_chain({"query": user_query})
             st.write(result)
         except Exception:
