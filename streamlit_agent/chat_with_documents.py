@@ -20,6 +20,8 @@ from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory #for chain with history
 from langchain_community.document_loaders import AsyncHtmlLoader
+import requests
+from bs4 import BeautifulSoup
 
 #--------------------------------------st.set_page_config--------------------------------------------------------------------------#
 
@@ -100,6 +102,7 @@ try:
     )
 
     url = st.sidebar.text_input("Enter url to query")
+
     # Inject custom CSS for glowing border effect
     st.markdown(
         """
@@ -323,16 +326,20 @@ try:
     #webscraping function
     def web_scraping_query(url : str):
         
-        loader = AsyncHtmlLoader(url)
-        docs = loader.load()
-        text_splitter = RecursiveCharacterTextSplitter(chunk_size = 1500, chunk_overlap = 200)
-        splits = text_splitter(docs)
+       response = requests.get(url)
+       if response.status_code == 200:
+           page_content = response.content
+           soup = BeautifulSoup(page_content,"html.parser")
+           text = soup.get_text()
 
-        embedding = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-        vector_db = DocArrayInMemorySearch.from_documents(splits,embedding)
-        retriever = vector_db.as_retriever()
+           splitter = RecursiveCharacterTextSplitter(chunk_size = 1500, chunk_overlap=200)
+           splits = splitter.split_documents(text)
+           embedding = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+           vector_db = DocArrayInMemorySearch.from_documents(splits,embedding)
 
-        return retriever
+           retriever = vector_db.as_retriever()
+
+           return retriever
 
         
          
