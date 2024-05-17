@@ -95,7 +95,9 @@ if not openai_api_key:
     st.info("Please add your OpenAI API key to continue.")
     st.stop()
 
-
+#model choice section
+llm_model = st.sidebar.selectbox("Chhose LLM model",
+                                 ("gpt-3.5-turbo","gpt-4","gpt-4-omni"))
 # File uploader in the sidebar
 uploaded_files = st.sidebar.file_uploader(
     label="Upload files", type=["pdf", "txt", "csv"], accept_multiple_files=True
