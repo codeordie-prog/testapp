@@ -80,7 +80,7 @@ st.markdown(
 
 # Use the custom CSS class for the title
 st.markdown('<h1 class="title">Ask FortyTwo</h1>', unsafe_allow_html=True)
-st.markdown("unlocking mysteries of the universe one question at a time")
+
 
 # Input for OpenAI API key in the sidebar
 openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
