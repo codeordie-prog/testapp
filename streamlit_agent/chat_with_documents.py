@@ -310,7 +310,7 @@ try:
             st.chat_message("assistant").write(assistant_msg)
 
             if st.sidebar.button("download chat"):
-               create_and_download(text_content=response)
+               create_and_download(text_content=response['text'])
 
 #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
  
