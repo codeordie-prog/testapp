@@ -72,7 +72,7 @@ try:
 
 
     #-----------------------------------------------------------sidebar about section-------------------------------------------------------------#
-    st.sidebar.image("streamlit_agent/logo/ap.jfif",width=200)
+    st.sidebar.image("streamlit_agent/logo/stimage.jfif",width=200)
     st.sidebar.title("Ask FortyTwo")
     st.sidebar.subheader("About")
     st.sidebar.info("""
