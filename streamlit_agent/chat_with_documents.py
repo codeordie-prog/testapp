@@ -100,7 +100,6 @@ try:
         label="Upload files", type=["pdf", "txt", "csv"], accept_multiple_files=True
     )
 
-    url = st.sidebar.text_input("Enter url to query")
 
     # Inject custom CSS for glowing border effect
     st.markdown(
@@ -325,22 +324,6 @@ try:
                 st.write("an Error occured please enter a valid OpenAI API key")
 
     #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
-    
-    #webscraping function
-    def scrape_web_page(url):
-       loader = WebBaseLoader(url)
-       data = loader.load()
-
-       splitter = RecursiveCharacterTextSplitter(chunk_size = 500, chunk_overlap=0)
-       splits = splitter.split_documents(data)
-       embedding = OpenAIEmbeddings()
-       vector_db = Chroma.from_documents(splits,embedding)
-
-       retriever = vector_db.as_retriever()
-
-       return retriever
-
-
         
          
     #function-4 query documents           
@@ -388,30 +371,7 @@ try:
                     qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
 
 
-    def query_website():
 
-        try:
-            
-            user_query = st.chat_input(placeholder="Ask me about the website!")
-            prompt = hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
-            retriever = scrape_web_page(url)
-
-            llm_model = st.sidebar.selectbox("Choose LLM model",
-                                    ("gpt-3.5-turbo","gpt-4","gpt-4o"))
-            # Setup LLM and QA chain for the documents part
-            llm = ChatOpenAI(
-                model_name=llm_model, openai_api_key=openai_api_key, temperature=0, streaming=True
-            )
-
-
-            qa_chain = RetrievalQA.from_chain_type(
-                llm, retriever=retriever, chain_type_kwargs={"prompt": prompt}
-            )
-
-            result = qa_chain({"query": user_query})
-            st.write(result['result'])
-        except Exception as e:
-            pass
 
 
 
@@ -423,8 +383,7 @@ try:
             
                 query_documents()
 
-            elif url:
-                query_website()
+
             else:
                 chat_with_42()
 
