@@ -72,7 +72,7 @@ try:
 
 
     #-----------------------------------------------------------sidebar about section-------------------------------------------------------------#
-
+    st.sidebar.image("streamlit_agent/logo/ap.jfif",width=200)
     st.sidebar.title("Ask FortyTwo")
     st.sidebar.subheader("About")
     st.sidebar.info("""
@@ -89,7 +89,7 @@ try:
     2. Click on the `+ Create new secret key` button.
     3. Next, enter an identifier name (optional) and click on the `Create secret key` button.""")
 
-
+    
     # Input for OpenAI API key in the sidebar
     openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
     if not openai_api_key:
