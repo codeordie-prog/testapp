@@ -95,9 +95,6 @@ if not openai_api_key:
     st.info("Please add your OpenAI API key to continue.")
     st.stop()
 
-#model choice section
-llm_model = st.sidebar.selectbox("Choose LLM model",
-                                 ("gpt-3.5-turbo","gpt-4","gpt-4o"))
 # File uploader in the sidebar
 uploaded_files = st.sidebar.file_uploader(
     label="Upload files", type=["pdf", "txt", "csv"], accept_multiple_files=True
@@ -275,6 +272,8 @@ try:
             st.session_state["messages"] = [{"role": "assistant", "content": "Chat history cleared. How can I help you?"}]
             st.experimental_rerun()  # Rerun the app to clear the chat history
 
+        llm_model = st.sidebar.selectbox("Choose LLM model",
+                                 ("gpt-3.5-turbo","gpt-4","gpt-4o"))
         
         # Handle user input
         if user_input := st.chat_input():
@@ -332,6 +331,8 @@ try:
         msgs = StreamlitChatMessageHistory()
         memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
 
+        llm_model = st.sidebar.selectbox("Choose LLM model",
+                                 ("gpt-3.5-turbo","gpt-4","gpt-4o"))
         # Setup LLM and QA chain for the documents part
         llm = ChatOpenAI(
             model_name=llm_model, openai_api_key=openai_api_key, temperature=0, streaming=True
