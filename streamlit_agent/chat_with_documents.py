@@ -331,7 +331,7 @@ try:
        loader = WebBaseLoader(url)
        data = loader.load()
 
-       splitter = RecursiveCharacterTextSplitter(chunk_size = 1500, chunk_overlap=200)
+       splitter = RecursiveCharacterTextSplitter(chunk_size = 500, chunk_overlap=0)
        splits = splitter.split_documents(data)
        embedding = OpenAIEmbeddings()
        vector_db = Chroma.from_documents(splits,embedding)
