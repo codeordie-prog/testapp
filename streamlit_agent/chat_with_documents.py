@@ -1,4 +1,3 @@
-import base64
 import os,io
 import tempfile
 import streamlit as st
@@ -349,8 +348,8 @@ try:
 
             elif uploaded_files:
 
-                #retriever = configure_retriever(uploaded_files)
-                retriever = scrape_web_page(url)
+                retriever = configure_retriever(uploaded_files)
+               
 
             else:
 
