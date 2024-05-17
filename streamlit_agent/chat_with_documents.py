@@ -3,6 +3,7 @@ import tempfile
 import streamlit as st
 from io import BytesIO
 from openai import OpenAI
+from langchain_openai import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
 from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader,WebBaseLoader
 from langchain.memory import ConversationBufferMemory
@@ -12,7 +13,7 @@ from langchain_community.chat_message_histories import (
 from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chains import ConversationalRetrievalChain
-from langchain.vectorstores import DocArrayInMemorySearch
+from langchain.vectorstores import DocArrayInMemorySearch, Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.chains import LLMChain
 from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate,MessagesPlaceholder
@@ -329,8 +330,8 @@ try:
 
        splitter = RecursiveCharacterTextSplitter(chunk_size = 1500, chunk_overlap=200)
        splits = splitter.split_documents(data)
-       embedding = HuggingFaceEmbeddings(model_name = "all-MiniLM-L6-v2")
-       vector_db = DocArrayInMemorySearch.from_documents(splits,embedding)
+       embedding = OpenAIEmbeddings()
+       vector_db = Chroma.from_documents(splits,embedding)
 
        retriever = vector_db.as_retriever()
 
