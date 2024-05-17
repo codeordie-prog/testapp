@@ -82,19 +82,22 @@ st.markdown(
 st.markdown('<h1 class="title">Ask FortyTwo</h1>', unsafe_allow_html=True)
 
 
+#--------sidebar about section------------#
+
+st.sidebar.subheader("About")
+st.sidebar.info("""
+    42 named after the Hitch Hiker's Guide to the Galaxy answer to the ultimate question of life,
+    is a smart bot that utilizes Retrieval Augmented Generation to query uploaded documents in the format `.pdf`,`.csv` and `.txt`.
+    42 also has a chat section where users can chat with the bot without uploading the documents.
+""")
+
+
 # Input for OpenAI API key in the sidebar
 openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 if not openai_api_key:
     st.info("Please add your OpenAI API key to continue.")
     st.stop()
 
-
-#--------sidebar about section------------
-st.sidebar.subheader("About")
-st.sidebar.info("""
-    This app allows you to choose from different language models.
-    You can also find instructions on how to use the app below.
-""")
 
 # File uploader in the sidebar
 uploaded_files = st.sidebar.file_uploader(
