@@ -317,7 +317,7 @@ try:
                         all_messages = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
                         create_and_download(text_content=all_messages)
             except Exception:
-                st.write("an Error occured check the key")
+                st.write("an Error occured please enter a valid OpenAI API key")
     #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
     
     #function-4 query documents           
