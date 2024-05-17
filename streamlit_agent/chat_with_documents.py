@@ -21,7 +21,7 @@ from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory #for chain with history
 from langchain_community.document_loaders import AsyncHtmlLoader
 import requests
-from lxml import html
+
 
 #--------------------------------------st.set_page_config--------------------------------------------------------------------------#
 

@@ -9,7 +9,6 @@ packages = [{include = "streamlit_agent"}]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"
-lxml = "^4.9.2"
 langchain = {version = ">=0.1.0"}
 openai = ">=1.6.1"
 duckduckgo-search = ">4.0"
