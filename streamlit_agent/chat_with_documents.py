@@ -19,7 +19,7 @@ from langchain.chains import LLMChain
 from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate,MessagesPlaceholder
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory #for chain with history
-from langchain import hub
+from langchain_community.retrievers import WikipediaRetriever
 
 
 #--------------------------------------st.set_page_config--------------------------------------------------------------------------#
@@ -100,6 +100,7 @@ try:
         label="Upload files", type=["pdf", "txt", "csv"], accept_multiple_files=True
     )
 
+    wikipedia = st.checkbox("Reference from wikipedia")
 
     # Inject custom CSS for glowing border effect
     st.markdown(
@@ -353,6 +354,8 @@ try:
                 verbose=True
             )
 
+            
+
             if len(msgs.messages) == 0 or st.sidebar.button("Clear message history"):
                 msgs.clear()
                 msgs.add_ai_message("Hey carbon entity, Want to query your documents? ask me!")
@@ -368,6 +371,19 @@ try:
                 with st.chat_message("ai"):
                     retrieval_handler = PrintRetrievalHandler(st.container())
                     stream_handler = StreamHandler(st.empty())
+
+                    if wikipedia :
+                        retriever2 = WikipediaRetriever()
+                        qa_chain = ConversationalRetrievalChain.from_llm(
+                                llm, 
+                                retriever=retriever2, 
+                                memory=memory, 
+                                verbose=True
+                            )
+                        
+                        qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+
+
                     qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
 
 
