@@ -391,10 +391,8 @@ try:
     def query_website():
 
         try:
-            if not url:
-                st.info("please enter url to query")
-                st.stop()
-
+            
+            user_query = st.chat_input(placeholder="Ask me about the website!")
             prompt = hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
             retriever = scrape_web_page(url)
 
@@ -414,8 +412,6 @@ try:
             )
 
 
-           
-            user_query = st.chat_input(placeholder="Ask me about the website!")
             st.chat_message("user").write(user_query)
 
             
