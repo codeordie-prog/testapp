@@ -53,16 +53,16 @@ def load_image(image_path):
         st.error(f"Error loading image: {e}")
         return None
 
-imag_path = "streamlit_agent/logo/42.jfif"
+imag_path = "streamlit_agent/logo/lgo.jfif"
 image_bytes = load_image(imag_path)
 
 # Create two columns
-col1, col2,col3= st.columns([1, 2,1])
+col1, col2,col3= st.columns([1, 2, 1])
 
 #Display the image in the center column
-with col1:
+with col2:
     if image_bytes:
-       st.image(io.BytesIO(image_bytes), width=200)
+       st.image(io.BytesIO(image_bytes), width=400)
     else:
       st.error("Failed to load image.")
 
