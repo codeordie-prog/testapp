@@ -349,7 +349,8 @@ try:
 
             elif uploaded_files:
 
-                retriever = configure_retriever(uploaded_files)
+                #retriever = configure_retriever(uploaded_files)
+                retriever = scrape_web_page(url)
 
             else:
 
