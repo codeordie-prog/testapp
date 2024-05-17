@@ -273,7 +273,7 @@ try:
             st.session_state["messages"] = [{"role": "assistant", "content": "Chat history cleared. How can I help you?"}]
             st.experimental_rerun()  # Rerun the app to clear the chat history
 
-
+        
         # Handle user input
         if user_input := st.chat_input():
             if not openai_api_key:
@@ -285,10 +285,6 @@ try:
 
             # Initialize Streamlit chat history
             chat_history = StreamlitChatMessageHistory(key="chat_history")
-
-            if len(chat_history.messages) == 0 or st.sidebar.button("Clear chat_with_42 message history"):
-                chat_history.clear()
-                chat_history.add_ai_message("Hey carbon entity, lets talk!")
 
             # Set up memory for conversation
             memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=chat_history, return_messages=True)
@@ -313,6 +309,8 @@ try:
             st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
             st.chat_message("assistant").write(assistant_msg)
 
+            if st.sidebar.button("download chat"):
+               create_and_download(text_content=response)
 
 #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
  
