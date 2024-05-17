@@ -1,7 +1,6 @@
 import base64
 import os,io
 import tempfile
-import chat
 import streamlit as st
 from io import BytesIO
 from openai import OpenAI
