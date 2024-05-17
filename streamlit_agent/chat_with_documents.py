@@ -5,7 +5,7 @@ import streamlit as st
 from io import BytesIO
 from openai import OpenAI
 from langchain.chat_models import ChatOpenAI
-from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader
+from langchain.document_loaders import PyPDFLoader,TextLoader,CSVLoader,WebBaseLoader
 from langchain.memory import ConversationBufferMemory
 from langchain_community.chat_message_histories import (
     StreamlitChatMessageHistory,
@@ -325,21 +325,18 @@ try:
     
     #webscraping function
     def scrape_web_page(url):
-        response = requests.get(url)
-        if response.status_code == 200:
-            page_content = response.content
-            tree = html.fromstring(page_content)
-            text_content = tree.xpath('//body//text()')  # Extract text content from the body
-            joined_text = ''.join(text_content)
+       loader = WebBaseLoader(url)
+       data = loader.load()
 
-            splitter = RecursiveCharacterTextSplitter(chunk_size = 1500, chunk_overlap=200)
-            splits = splitter.split_documents(joined_text)
-            embedding = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-            vector_db = DocArrayInMemorySearch.from_documents(splits,embedding)
+       splitter = RecursiveCharacterTextSplitter(chunk_size = 1500, chunk_overlap=200)
+       splits = splitter.split_documents(data)
+       embedding = HuggingFaceEmbeddings(model_name = "all-MiniLM-L6-v2")
+       vector_db = DocArrayInMemorySearch.from_documents(splits,embedding)
 
-            retriever = vector_db.as_retriever()
+       retriever = vector_db.as_retriever()
 
-            return retriever
+       return retriever
+
 
         
          
