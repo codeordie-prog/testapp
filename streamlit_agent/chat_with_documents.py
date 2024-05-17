@@ -411,7 +411,7 @@ try:
             result = qa_chain({"query": user_query})
             st.write(result['result'])
         except Exception as e:
-            st.write(e)
+            pass
 
 
 
