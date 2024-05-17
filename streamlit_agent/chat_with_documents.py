@@ -100,7 +100,7 @@ try:
         label="Upload files", type=["pdf", "txt", "csv"], accept_multiple_files=True
     )
 
-    url = st.sidebar.text_input("Enter url to query")
+    #url = st.sidebar.text_input("Enter url to query")
 
     # Inject custom CSS for glowing border effect
     st.markdown(
@@ -306,12 +306,7 @@ try:
                     st.session_state["messages"].append({"role": "user", "content": user_input})
                     st.chat_message("user").write(user_input)
 
-                    if url:
-                        prompt = hub.pull("rlm/rag-prompt", api_url="https://api.hub.langchain.com")
-                        retriever2 = scrape_web_page(url)
-                        response = RetrievalQA.from_chain_type( 
-                        llm2, retriever=retriever2, chain_type_kwargs={"prompt": prompt}
-                         )
+            
                                         # Get response from LLM chain
                     response = llm_chain.run({"question": user_input})
                     assistant_msg = response  # Adjusted to fetch text from the response
