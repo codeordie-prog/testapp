@@ -23,7 +23,8 @@ from langchain_core.runnables.history import RunnableWithMessageHistory #for cha
 
 from langchain.prompts import PromptTemplate
 
-#st.set_page_config(page_title="Ask Fortytwo", page_icon="👽", layout="centered")
+#--------------------------------------st.set_page_config--------------------------------------------------------------------------#
+
 st.set_page_config(
     page_title="Ask FortyTwo",
     page_icon="👽",
@@ -44,7 +45,8 @@ st.set_page_config(
 )
 
 
-# Load the image
+#----------------------------------------------------- Load the image function-----------------------------------------------------#
+
 def load_image(image_path):
     try:
         with open(image_path, "rb") as image_file:
@@ -68,7 +70,7 @@ with col2:
 
 
 
-#--------sidebar about section------------#
+#-----------------------------------------------------------sidebar about section-------------------------------------------------------------#
 
 st.sidebar.title("Ask FortyTwo")
 st.sidebar.subheader("About")
@@ -78,7 +80,8 @@ st.sidebar.info("""
     42 also has a chat section where users can chat with the bot without uploading the documents.
 """)
 
-#-------sidebar instructions section------#
+#--------------------------------------------------sidebar instructions section-------------------------------------------------------------#
+
 st.sidebar.subheader("Get an openAI API key")
 st.sidebar.info("""
 1. Go to [OpenAI API Keys](https://platform.openai.com/account/api-keys).
@@ -125,6 +128,8 @@ st.markdown(
 
 
 
+#----------------------------------------------streamhandler and retriever class section------------------------------------------------------#
+
 try:
     
     class StreamHandler(BaseCallbackHandler):
@@ -168,7 +173,10 @@ try:
     #initialize the chain with all the set up fields i.e promp,memory,verbose false and llm
     #use the chain to invoke chat query
 
-    #function-1   
+
+#----------------------------------------------configuring retriever section----------------------------------------------------------#
+
+    #function-2   
     @st.cache_resource(ttl="2h")
     def configure_retriever(uploaded_files):
         # Read documents
@@ -206,7 +214,10 @@ try:
 
         return retriever
 
-    #function-2
+
+#---------------------------------------------define download txt function-------------------------------------------------------------------#
+
+    #function-3
     #define download txt
     def create_and_download(text_content):
         """Generates a text file in memory and offers a download button."""
@@ -229,9 +240,9 @@ try:
             mime="text/plain"
         )
     
-    #function-3 chat session
+#-------------------------------------------------------------chat setup section---------------------------------------------------------#
 
-    
+    #function-4 chat session
     def chat_with_42():
         # Define the system prompt template
         system_prompt = ChatPromptTemplate.from_messages(
@@ -240,7 +251,7 @@ try:
                     content="""You are a very intelligent digital AI system that understands humans properly. Your name is 42,
                     you were named after the answer to the ultimate question in the hitch hikers guide to the galaxy. You were created by Kelvin Ndeti,
                     in association with Dr. Whbet Paulos, inspired by the need to utilize Retrieval Augmented Generation in data querying.
-                    Answer the user queries accurately. Use your knowledge base. Don't ever fail to provide a coding request assistance or 
+                    Answer the user queries accurately. Use your knowledge base. Don't ever fail to provide a coding request, math assistance or 
                     assistance with writing a document like a resume or an official document because you were trained to know all of that.
                     """
                 ),
@@ -256,6 +267,12 @@ try:
         # Display chat history messages
         for msg in st.session_state["messages"]:
             st.chat_message(msg["role"]).write(msg["content"])
+
+         # "Clear Chat History" button
+        if st.sidebar.button("Clear Chat History"):
+            st.session_state["messages"] = [{"role": "assistant", "content": "Chat history cleared. How can I help you?"}]
+            st.experimental_rerun()  # Rerun the app to clear the chat history
+
 
         # Handle user input
         if user_input := st.chat_input():
@@ -296,7 +313,9 @@ try:
             st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
             st.chat_message("assistant").write(assistant_msg)
 
-        
+
+#---------------------------------------------------------RAG setup section------------------------------------------------------------------#
+ 
      #function-4 query documents           
     def query_documents():
        
@@ -342,7 +361,7 @@ try:
                 qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
                
                
-    #main function
+#--------------------------------------------------------------main function------------------------------------------------------------------#
     def main():
 
         if uploaded_files:
