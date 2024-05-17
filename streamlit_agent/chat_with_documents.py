@@ -283,7 +283,7 @@ try:
                 st.stop()
 
             # Initialize OpenAI LLM
-            llm2 = ChatOpenAI(openai_api_key=openai_api_key, model_name = llm_model)
+            llm2 = ChatOpenAI(openai_api_key=openai_api_key, model_name = "gpt-4")
 
             # Initialize Streamlit chat history
             chat_history = StreamlitChatMessageHistory(key="chat_history")
