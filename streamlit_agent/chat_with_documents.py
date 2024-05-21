@@ -486,7 +486,7 @@ try:
             
                 query_documents()
 
-            elif url and web_document_name:
+            elif url and web_document_name and not uploaded_files:
                  
                  query_web()
 
