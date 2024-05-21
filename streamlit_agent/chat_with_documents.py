@@ -91,6 +91,17 @@ try:
     2. Click on the `+ Create new secret key` button.
     3. Next, enter an identifier name (optional) and click on the `Create secret key` button.""")
 
+    #---------------------------------------------------sidebar for query web-------------------------------------------------------------------#
+
+    st.sidebar.subheader("Query web section")
+    st.sidebar.info("""use this section to interact with web information
+                    
+                    1. Copy the URL of the webpage and paste it on the URL input section
+                    2. Enter the document saving name. as you desire
+                    3. Query the website for information by asking 42 about it""")
+    
+    url = st.sidebar.text_input("enter url")
+    web_document_name = st.sidebar.text_input("Enter name for the web document")
     
     # Input for OpenAI API key in the sidebar
     openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
@@ -102,9 +113,6 @@ try:
     uploaded_files = st.sidebar.file_uploader(
         label="Upload files", type=["pdf", "txt", "csv"], accept_multiple_files=True
     )
-
-    url = st.sidebar.text_input("enter url")
-    web_document_name = st.sidebar.text_input("Enter name for the web document")
 
 
     # Inject custom CSS for glowing border effect
