@@ -342,11 +342,14 @@ try:
         paragraphs = tree.xpath('//p')
         text_content = '\n'.join([para.text_content() for para in paragraphs])
 
-        # Step 4: Save the data to a text file
-        with open('web_content.txt', 'w', encoding='utf-8') as file:
-            file.write(text_content)
+        # Step 4: Save the data to a temporary file with a specified name
+        with tempfile.TemporaryDirectory() as temp_dir:
+            temp_file_path = os.path.join(temp_dir, 'webber.txt')
+            with open(temp_file_path, 'w', encoding='utf-8') as temp_file:
+                temp_file.write(text_content)
 
-        return file
+
+        configure_retriever(uploaded_files=temp_file_path)
 
     #function-4 query documents           
     def query_documents():
@@ -356,51 +359,51 @@ try:
                 st.stop()
 
             if url:
-                file = web_page_saver_to_txt(url)
-                configure_retriever(uploaded_files=file)
+                retriever = web_page_saver_to_txt(url)
                 
+            else:   
 
-            retriever = configure_retriever(uploaded_files)
-            # Setup memory for contextual conversation for the documents part
+                retriever = configure_retriever(uploaded_files)
+                # Setup memory for contextual conversation for the documents part
             msgs = StreamlitChatMessageHistory()
             memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
 
             llm_model = st.sidebar.selectbox("Choose LLM model",
-                                    ("gpt-3.5-turbo","gpt-4","gpt-4o"))
-            
-            
-            # Setup LLM and QA chain for the documents part
+                                        ("gpt-3.5-turbo","gpt-4","gpt-4o"))
+                
+                
+                # Setup LLM and QA chain for the documents part
             llm = ChatOpenAI(
-                model_name=llm_model, openai_api_key=openai_api_key, temperature=0, streaming=True
-            )
+                    model_name=llm_model, openai_api_key=openai_api_key, temperature=0, streaming=True
+                )
 
 
             qa_chain = ConversationalRetrievalChain.from_llm(
-                llm, 
-                retriever=retriever, 
-                memory=memory, 
-                verbose=True
-            )
+                    llm, 
+                    retriever=retriever, 
+                    memory=memory, 
+                    verbose=True
+                )
 
-            
+                
 
             if len(msgs.messages) == 0 or st.sidebar.button("Clear message history"):
-                msgs.clear()
-                msgs.add_ai_message("Hey carbon entity, Want to query your documents? ask me!")
+                    msgs.clear()
+                    msgs.add_ai_message("Hey carbon entity, Want to query your documents? ask me!")
 
             avatars = {"human": "user", "ai": "assistant"}
             for msg in msgs.messages:
                 st.chat_message(avatars[msg.type]).write(msg.content)
-            
+                
             st.markdown("Document query section. Utilize RAG you curious being.")
             if user_query := st.chat_input(placeholder="Ask me about  your documents!"):
                 st.chat_message("user").write(user_query)
 
                 with st.chat_message("ai"):
-                    retrieval_handler = PrintRetrievalHandler(st.container())
-                    stream_handler = StreamHandler(st.empty())
+                        retrieval_handler = PrintRetrievalHandler(st.container())
+                        stream_handler = StreamHandler(st.empty())
 
-                    qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+                        qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
 
 
 
