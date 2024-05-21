@@ -357,7 +357,7 @@ try:
 
             if url:
                 file = web_page_saver_to_txt(url)
-                st.write(file)
+                configure_retriever(uploaded_files=file)
                 
 
             retriever = configure_retriever(uploaded_files)
