@@ -339,7 +339,7 @@ try:
                 st.write("an Error occured please enter a valid OpenAI API key")
 
     #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
-
+    #query website function
     def web_page_saver_to_txt(url):
 
         results = requests.get(url)
@@ -383,13 +383,8 @@ try:
             if not uploaded_files:
                 st.info("Please upload documents or add url to continue.")
                 st.stop()
-                
-
-            elif url and web_document_name:
-                retriever = web_page_saver_to_txt(url)
-
-            else:
-                 retriever = configure_retriever(uploaded_files)   
+                 
+            retriever = configure_retriever(uploaded_files)   
             
             # Setup memory for contextual conversation for the documents part
             msgs = StreamlitChatMessageHistory()
