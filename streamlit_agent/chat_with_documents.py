@@ -359,7 +359,7 @@ try:
                 st.stop()
 
             if url:
-                retriever = web_page_saver_to_txt(url)
+                web_page_saver_to_txt(url)
                 
             else:   
 
