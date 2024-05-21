@@ -16,10 +16,12 @@ from langchain.chains import ConversationalRetrievalChain,RetrievalQA
 from langchain.vectorstores import DocArrayInMemorySearch, Chroma
 from langchain.text_splitter import RecursiveCharacterTextSplitter,CharacterTextSplitter
 from langchain.chains import LLMChain
-from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate,MessagesPlaceholder
+from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate,MessagesPlaceholder,PromptTemplate
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory #for chain with history
 from langchain_community.retrievers import WikipediaRetriever
+import requests
+
 
 
 #--------------------------------------st.set_page_config--------------------------------------------------------------------------#
@@ -99,6 +101,8 @@ try:
     uploaded_files = st.sidebar.file_uploader(
         label="Upload files", type=["pdf", "txt", "csv"], accept_multiple_files=True
     )
+
+    url = st.sidebar.text_input("enter url")
 
 
     # Inject custom CSS for glowing border effect
@@ -243,6 +247,7 @@ try:
     #-------------------------------------------------------------chat setup section---------------------------------------------------------#
 
     #function-4 chat session
+    @st.cache_resource(ttl="2h")
     def chat_with_42():
             # Define the system prompt template
             system_prompt = ChatPromptTemplate.from_messages(
@@ -324,7 +329,34 @@ try:
                 st.write("an Error occured please enter a valid OpenAI API key")
 
     #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
-        
+
+    def store_and_query_webpage(url, query):
+        # Step 1: Fetch the webpage content
+        response = requests.get(url)
+        response.raise_for_status()
+        webpage_content = response.text
+
+        # Step 2: Extract the text content from the webpage
+        # Assuming the webpage content is plain text or can be processed as such
+        # If the webpage is HTML, you might need to use a different method to extract text
+        text_content = webpage_content
+
+        # Step 3: Store the text content in a Chroma vector database
+        chroma_db = Chroma()
+        chroma_db.add_texts([text_content])
+
+        # Step 4: Query the Chroma vector database using an LLMChain
+        llm = OpenAI()
+        prompt_template = PromptTemplate(
+            input_variables=["query"],
+            template="Given the following text: {text_content}, answer the query: {query}"
+        )
+        chain = LLMChain(llm=llm, prompt=prompt_template)
+
+        # Execute the query
+        result = chain.run(query=query, text_content=text_content)
+
+        return result   
          
     #function-4 query documents           
     def query_documents():
