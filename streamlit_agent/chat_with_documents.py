@@ -104,6 +104,7 @@ try:
     )
 
     url = st.sidebar.text_input("enter url")
+    web_document_name = st.sidebar.text_input("Enter name for the web document")
 
 
     # Inject custom CSS for glowing border effect
@@ -332,6 +333,7 @@ try:
     #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
 
     def web_page_saver_to_txt(url):
+
         results = requests.get(url)
         web_content = results.content
 
@@ -344,7 +346,7 @@ try:
 
         # Step 4: Save the data to a temporary file with a specified name
         with tempfile.TemporaryDirectory() as temp_dir:
-            temp_file_path = os.path.join(temp_dir, 'webber.txt')
+            temp_file_path = os.path.join(temp_dir, web_document_name)
             with open(temp_file_path, 'w', encoding='utf-8') as temp_file:
                 temp_file.write(text_content)
 
@@ -370,15 +372,15 @@ try:
     #function-4 query documents           
     def query_documents():
         
-            if not uploaded_files:
-                st.info("Please upload documents or add url to continue.")
-                st.stop()
+            if uploaded_files:
+                #st.info("Please upload documents or add url to continue.")
+                #st.stop()
+                retriever = configure_retriever(uploaded_files)
 
             elif url:
                 retriever = web_page_saver_to_txt(url)
                 
-            else:
-                retriever = configure_retriever(uploaded_files)
+            
             # Setup memory for contextual conversation for the documents part
             msgs = StreamlitChatMessageHistory()
             memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
