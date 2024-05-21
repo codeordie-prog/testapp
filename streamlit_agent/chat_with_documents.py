@@ -358,13 +358,12 @@ try:
                 st.info("Please upload documents or add url to continue.")
                 st.stop()
 
-            if url:
-                web_page_saver_to_txt(url)
+            #if url:
+                #web_page_saver_to_txt(url)
                 
-            else:   
-
-                retriever = configure_retriever(uploaded_files)
-                # Setup memory for contextual conversation for the documents part
+           
+            retriever = configure_retriever(uploaded_files)
+            # Setup memory for contextual conversation for the documents part
             msgs = StreamlitChatMessageHistory()
             memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
 
