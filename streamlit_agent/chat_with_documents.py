@@ -437,6 +437,10 @@ try:
             
                 query_documents()
 
+            elif url and web_document_name:
+                 
+                 query_documents()
+
 
             else:
                 chat_with_42()
