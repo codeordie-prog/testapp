@@ -247,7 +247,7 @@ try:
     #-------------------------------------------------------------chat setup section---------------------------------------------------------#
 
     #function-4 chat session
-    @st.cache_resource(ttl="2h")
+
     def chat_with_42():
             # Define the system prompt template
             system_prompt = ChatPromptTemplate.from_messages(
