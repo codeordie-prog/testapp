@@ -21,6 +21,7 @@ from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
 from langchain_core.runnables.history import RunnableWithMessageHistory #for chain with history
 from langchain_community.retrievers import WikipediaRetriever
 import requests
+from lxml import html
 
 
 
@@ -102,7 +103,7 @@ try:
         label="Upload files", type=["pdf", "txt", "csv"], accept_multiple_files=True
     )
 
-    #url = st.sidebar.text_input("enter url")
+    url = st.sidebar.text_input("enter url")
 
 
     # Inject custom CSS for glowing border effect
@@ -330,40 +331,30 @@ try:
 
     #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
 
-    def store_and_query_webpage(url, query):
-        # Step 1: Fetch the webpage content
-        response = requests.get(url)
-        response.raise_for_status()
-        webpage_content = response.text
+    def web_page_saver_to_txt(url):
 
-        # Step 2: Extract the text content from the webpage
-        # Assuming the webpage content is plain text or can be processed as such
-        # If the webpage is HTML, you might need to use a different method to extract text
-        text_content = webpage_content
+        results = requests.get(url)
+        web_content = results.content
+        # Step 2: Parse the webpage content using lxml
+        tree = html.fromstring(web_content)
 
-        # Step 3: Store the text content in a Chroma vector database
-        chroma_db = Chroma()
-        chroma_db.add_texts([text_content])
+        # Step 3: Extract the desired data (text from <p> tags in this example)
+        paragraphs = tree.xpath('//p')
+        text_content = '\n'.join([para.text_content() for para in paragraphs])
 
-        # Step 4: Query the Chroma vector database using an LLMChain
-        llm = OpenAI()
-        prompt_template = PromptTemplate(
-            input_variables=["query"],
-            template="Given the following text: {text_content}, answer the query: {query}"
-        )
-        chain = LLMChain(llm=llm, prompt=prompt_template)
+        # Step 4: Save the data to a text file
+        with open('web_content.txt', 'w', encoding='utf-8') as file:
+            file.write(text_content)
 
-        # Execute the query
-        result = chain.run(query=query, text_content=text_content)
-
-        return result   
-         
     #function-4 query documents           
     def query_documents():
         
             if not uploaded_files:
                 st.info("Please upload documents or add url to continue.")
                 st.stop()
+
+            if url:
+                web_page_saver_to_txt(url)
 
             retriever = configure_retriever(uploaded_files)
             # Setup memory for contextual conversation for the documents part
