@@ -372,14 +372,16 @@ try:
     #function-4 query documents           
     def query_documents():
         
-            if uploaded_files:
-                #st.info("Please upload documents or add url to continue.")
-                #st.stop()
-                retriever = configure_retriever(uploaded_files)
-
-            elif url:
-                retriever = web_page_saver_to_txt(url)
+            if not uploaded_files:
+                st.info("Please upload documents or add url to continue.")
+                st.stop()
                 
+
+            elif url and web_document_name:
+                retriever = web_page_saver_to_txt(url)
+
+            else:
+                 retriever = configure_retriever(uploaded_files)   
             
             # Setup memory for contextual conversation for the documents part
             msgs = StreamlitChatMessageHistory()
