@@ -332,9 +332,9 @@ try:
     #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
 
     def web_page_saver_to_txt(url):
-
         results = requests.get(url)
         web_content = results.content
+
         # Step 2: Parse the webpage content using lxml
         tree = html.fromstring(web_content)
 
@@ -348,8 +348,24 @@ try:
             with open(temp_file_path, 'w', encoding='utf-8') as temp_file:
                 temp_file.write(text_content)
 
+            # Load the text file using TextLoader
+            loader = TextLoader(temp_file_path)
+            docs = loader.load()
 
-            st.write(temp_file)
+            # Split the documents
+            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=200)
+            splits = text_splitter.split_documents(docs)
+
+            # Create embeddings and store in vectordb
+            embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+            vectordb = DocArrayInMemorySearch.from_documents(splits, embeddings)
+
+            # Define retriever
+            retriever = vectordb.as_retriever()
+
+            return retriever
+
+            
 
     #function-4 query documents           
     def query_documents():
@@ -358,11 +374,11 @@ try:
                 st.info("Please upload documents or add url to continue.")
                 st.stop()
 
-            #if url:
-                #web_page_saver_to_txt(url)
+            if url:
+                retriever = web_page_saver_to_txt(url)
                 
-           
-            retriever = configure_retriever(uploaded_files)
+            else:
+                retriever = configure_retriever(uploaded_files)
             # Setup memory for contextual conversation for the documents part
             msgs = StreamlitChatMessageHistory()
             memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
