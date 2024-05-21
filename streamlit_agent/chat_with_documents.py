@@ -374,7 +374,7 @@ try:
                 st.info("Please upload documents or add url to continue.")
                 st.stop()
 
-            if url:
+            elif url:
                 retriever = web_page_saver_to_txt(url)
                 
             else:
