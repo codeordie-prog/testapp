@@ -346,6 +346,8 @@ try:
         with open('web_content.txt', 'w', encoding='utf-8') as file:
             file.write(text_content)
 
+        return file
+
     #function-4 query documents           
     def query_documents():
         
@@ -354,7 +356,9 @@ try:
                 st.stop()
 
             if url:
-                web_page_saver_to_txt(url)
+                file = web_page_saver_to_txt(url)
+                st.write(file)
+                
 
             retriever = configure_retriever(uploaded_files)
             # Setup memory for contextual conversation for the documents part
