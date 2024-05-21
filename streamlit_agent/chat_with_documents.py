@@ -372,6 +372,12 @@ try:
 
             llm_model = st.sidebar.selectbox("Choose LLM model",
                                     ("gpt-3.5-turbo","gpt-4","gpt-4o"))
+            
+            if url:
+
+                query = st.chat_input("Enter query")
+                result = store_and_query_webpage(url, query)
+                st.write(result)
             # Setup LLM and QA chain for the documents part
             llm = ChatOpenAI(
                 model_name=llm_model, openai_api_key=openai_api_key, temperature=0, streaming=True
