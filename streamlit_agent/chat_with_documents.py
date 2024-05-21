@@ -106,8 +106,8 @@ try:
     #---------------------------------------------------sidebar for query web-------------------------------------------------------------------#
 
     st.sidebar.subheader("Query web section")
-    st.sidebar.info("""use this section to interact with web information.
-                    
+    st.sidebar.info("""
+                    use this section to interact with web information. 
                     1. Copy the URL of the webpage and paste it on the URL input section.
                     2. Enter the document saving name. as you desire.
                     3. Query the website for information by asking 42 about it.""")
