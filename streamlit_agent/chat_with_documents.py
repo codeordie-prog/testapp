@@ -340,6 +340,7 @@ try:
 
     #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
     #query website function
+    @st.cache_resource(ttl="2h")
     def web_page_saver_to_txt(url):
 
         results = requests.get(url)
