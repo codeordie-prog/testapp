@@ -349,8 +349,8 @@ try:
                 temp_file.write(text_content)
 
 
-        retriever = configure_retriever(uploaded_files=temp_file_path)
-        return retriever
+            retriever = configure_retriever(uploaded_files=[temp_file_path])
+            return retriever
 
     #function-4 query documents           
     def query_documents():
