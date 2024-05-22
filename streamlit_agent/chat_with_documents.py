@@ -324,7 +324,7 @@ try:
 
             
                                         # Get response from LLM chain
-                    response = llm_chain.run({"question": user_input},callbacks = stream_handler)
+                    response = llm_chain.run({"question": user_input},callbacks = [stream_handler])
                     assistant_msg = response  # Adjusted to fetch text from the response
 
                     
