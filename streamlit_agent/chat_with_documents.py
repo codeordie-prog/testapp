@@ -316,13 +316,15 @@ try:
                         prompt=system_prompt
                     )
 
+                    stream_handler = StreamHandler(st.empty())
+
                     # Append user message to session state
                     st.session_state["messages"].append({"role": "user", "content": user_input})
                     st.chat_message("user").write(user_input)
 
             
                                         # Get response from LLM chain
-                    response = llm_chain.run({"question": user_input})
+                    response = llm_chain.run({"question": user_input},callbacks = [stream_handler])
                     assistant_msg = response  # Adjusted to fetch text from the response
 
                     
