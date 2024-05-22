@@ -344,38 +344,41 @@ try:
     @st.cache_resource(ttl="2h")
     def web_page_saver_to_txt(url):
 
-        results = requests.get(url)
-        web_content = results.content
+        try:
+            results = requests.get(url)
+            web_content = results.content
 
-        # Step 2: Parse the webpage content using lxml
-        tree = html.fromstring(web_content)
+            # Step 2: Parse the webpage content using lxml
+            tree = html.fromstring(web_content)
 
-        # Step 3: Extract the desired data (text from <p> tags in this example)
-        paragraphs = tree.xpath('//p')
-        text_content = '\n'.join([para.text_content() for para in paragraphs])
+            # Step 3: Extract the desired data (text from <p> tags in this example)
+            paragraphs = tree.xpath('//p')
+            text_content = '\n'.join([para.text_content() for para in paragraphs])
 
-        # Step 4: Save the data to a temporary file with a specified name
-        with tempfile.TemporaryDirectory() as temp_dir:
-            temp_file_path = os.path.join(temp_dir, web_document_name)
-            with open(temp_file_path, 'w', encoding='utf-8') as temp_file:
-                temp_file.write(text_content)
+            # Step 4: Save the data to a temporary file with a specified name
+            with tempfile.TemporaryDirectory() as temp_dir:
+                temp_file_path = os.path.join(temp_dir, web_document_name)
+                with open(temp_file_path, 'w', encoding='utf-8') as temp_file:
+                    temp_file.write(text_content)
 
-            # Load the text file using TextLoader
-            loader = TextLoader(temp_file_path)
-            docs = loader.load()
+                # Load the text file using TextLoader
+                loader = TextLoader(temp_file_path)
+                docs = loader.load()
 
-            # Split the documents
-            text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=200)
-            splits = text_splitter.split_documents(docs)
+                # Split the documents
+                text_splitter = RecursiveCharacterTextSplitter(chunk_size=1500, chunk_overlap=200)
+                splits = text_splitter.split_documents(docs)
 
-            # Create embeddings and store in vectordb
-            embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
-            vectordb = DocArrayInMemorySearch.from_documents(splits, embeddings)
+                # Create embeddings and store in vectordb
+                embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+                vectordb = DocArrayInMemorySearch.from_documents(splits, embeddings)
 
-            # Define retriever
-            retriever = vectordb.as_retriever()
+                # Define retriever
+                retriever = vectordb.as_retriever()
 
-            return retriever
+                return retriever
+        except Exception:
+             st.write("enter valid URL")
 
             
 
