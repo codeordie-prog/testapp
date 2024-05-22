@@ -311,7 +311,7 @@ try:
                     # Create the LLM chain
                     llm_chain = LLMChain(
                         llm=llm2,
-                        verbose=True,
+                        verbose=False,
                         memory=memory,
                         prompt=system_prompt
                     )
