@@ -317,22 +317,20 @@ try:
                     )
 
                     
-
                     # Append user message to session state
                     st.session_state["messages"].append({"role": "user", "content": user_input})
                     st.chat_message("user").write(user_input)
 
+                    #introduce streaming in chat session
                     stream_handler = StreamHandler(st.empty())
             
-                                        # Get response from LLM chain
-                    response = llm_chain.run({"question": user_input},callbacks = [stream_handler])
+                    # Get response from LLM chain
+                    response = llm_chain.run({"question": user_input}, callbacks = [stream_handler])
                     assistant_msg = response  # Adjusted to fetch text from the response
 
                     
-
                     # Append assistant message to session state and display it
                     st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
-                    #st.chat_message("assistant").write(assistant_msg)
 
                     # Download chat button
                     if st.sidebar.button("Download Chat"):
