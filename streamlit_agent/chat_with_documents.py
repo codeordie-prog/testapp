@@ -224,7 +224,9 @@ try:
             vectordb = DocArrayInMemorySearch.from_documents(splits, embeddings)
 
             # Define retriever
-            retriever = vectordb.as_retriever(search_kwargs = {"k" : 8}) #retrieve default
+            retriever = vectordb.as_retriever(
+                 search_type ="mmr",
+                 search_kwargs = {"k" : 8}) #retrieve default
 
             return retriever
 
