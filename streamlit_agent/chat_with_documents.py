@@ -494,23 +494,17 @@ try:
     #--------------------------------------------------------------main function------------------------------------------------------------------#
     def main():
             
-            #columns
+        if uploaded_files:
+            
+                query_documents()
 
-            column1,column2,column3,column4 = st.columns([2,1,1,1])
-
-            with column1:
-                
-                chat_with_42()
-
-            with column2:
+        elif url and web_document_name and not uploaded_files:
                  
-                      query_documents()
+            query_web()
 
-            with column3:
-                 
-                     
-                     query_web()
 
+        else:
+            chat_with_42()
 
     #call main
     main()
