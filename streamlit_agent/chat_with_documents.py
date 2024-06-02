@@ -524,7 +524,7 @@ try:
             texts = python_splitter.split_documents(documents)
 
             # Retriever
-            db = Chroma.from_documents(texts, OpenAIEmbeddings(disallowed_special=()))
+            db = Chroma.from_documents(texts, OpenAIEmbeddings(disallowed_special=(),api_key=openai_api))
             retriever = db.as_retriever(
                 search_type="mmr",  # Also test "similarity"
                 search_kwargs={"k": 8},
