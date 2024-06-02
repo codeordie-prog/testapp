@@ -584,7 +584,8 @@ try:
 
             elif sidebar_option == "Github":
                  url_github = st.text_input("Enter github url")
-                 github_repo_query(url_github)
+                 if url_github:
+                    github_repo_query(url_github)
 
         except Exception as e:
              st.write("An error was encountered at main call",e)
