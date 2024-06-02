@@ -91,7 +91,7 @@ try:
 
     sidebar_option = st.sidebar.radio(
          "Select an option",
-         ("Chat","Query document","Query url","Github")
+         ("Chat and query","Github")
     )
 
     #--------------------------------------------------sidebar instructions section-------------------------------------------------------------#
