@@ -498,21 +498,17 @@ try:
 
         with tab1:
            
-           if not uploaded_files and not url and not web_document_name:
-                chat_with_42()
+            if uploaded_files:
+                query_documents()
 
-        with tab2:
-             
-              if uploaded_files:
-                
-                    query_documents()
-
-        with tab3:
-             
-            if url and web_document_name:
-                    
+            elif url and web_document_name and not uploaded_files:
                 query_web()
+            
+            else:
+                 chat_with_42()
 
+
+       
 
           
     #call main
