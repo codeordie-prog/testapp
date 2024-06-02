@@ -504,12 +504,10 @@ try:
 
             with column2:
                  
-                 if uploaded_files:
                       query_documents()
 
             with column3:
                  
-                if url and web_document_name:
                      
                      query_web()
 
