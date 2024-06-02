@@ -498,7 +498,8 @@ try:
 
         with tab1:
            
-           chat_with_42()
+           if not uploaded_files and not url and not web_document_name:
+                chat_with_42()
 
         with tab2:
              
