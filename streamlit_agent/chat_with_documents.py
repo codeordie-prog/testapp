@@ -502,19 +502,12 @@ try:
        
     #--------------------------------------------------------------main function------------------------------------------------------------------#
     def main():
-            
-        if uploaded_files:
-            
-                query_documents()
 
-        elif url and web_document_name and not uploaded_files:
-                 
-                 query_web()
+        if sidebar_option == "Chat":
+            st.title("Chat with 42")
+            chat_with_42()
 
-
-        else:
-                chat_with_42()
-          
+        
     #call main
     main()
 
