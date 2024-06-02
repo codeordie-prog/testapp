@@ -590,8 +590,8 @@ try:
                     query_web()
 
             elif sidebar_option == "Github":
-                 url = st.text_input("Enter github url")
-                 github_repo_query(url)
+                 url_github = st.text_input("Enter github url")
+                 github_repo_query(url_github)
 
         except Exception as e:
              st.write("An error was encountered at main call",e)
