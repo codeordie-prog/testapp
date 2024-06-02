@@ -501,7 +501,7 @@ try:
                         qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
 
     #define repo query
-    def github_repo_query(github_repo_url: str):
+    def github_repo_query(github_repo_url: str, openai_api):
         with tempfile.TemporaryDirectory() as temp_dir:
             # Clone the repo
             repo_path = os.path.join(temp_dir, "repo")
@@ -531,7 +531,7 @@ try:
             )
 
             llm_model = st.sidebar.selectbox("Choose LLM model", ("gpt-4", "gpt-4o"))
-            llm = ChatOpenAI(model_name=llm_model,openai_api_key = openai_api_key)
+            llm = ChatOpenAI(model_name=llm_model,openai_api_key = openai_api)
 
             # Prompt
             prompt_retriever = ChatPromptTemplate.from_messages(
@@ -584,8 +584,9 @@ try:
 
             elif sidebar_option == "Github":
                  url_github = st.text_input("Enter github url")
-                 if url_github:
-                    github_repo_query(url_github)
+                 api = st.text_input("api")
+                 if url_github and api:
+                    github_repo_query(url_github,api)
 
         except Exception as e:
              st.write("An error was encountered at main call",e)
