@@ -494,9 +494,7 @@ try:
     #--------------------------------------------------------------main function------------------------------------------------------------------#
     def main():
             
-        tab1, tab2, tab3, tab4, tab5 = st.tabs(["Chat", "Document query", "web query", "Github Repo", "Test Cases"])
 
-        with tab1:
            
             if uploaded_files:
             
