@@ -494,13 +494,17 @@ try:
     #--------------------------------------------------------------main function------------------------------------------------------------------#
     def main():
             
-        tab1, tab2, tab3, tab4, tab5 = st.tabs(["chat", "Attack Tree", "Mitigations", "DREAD", "Test Cases"])
+        if uploaded_files:
+            
+                query_documents()
 
-        with tab1:
-            if not uploaded_files and not url and not web_document_name:
-                    chat_with_42()
-           
+        elif url and web_document_name and not uploaded_files:
+                 
+                 query_web()
 
+
+        else:
+                chat_with_42()
           
     #call main
     main()
