@@ -71,11 +71,7 @@ try:
         else:
          st.error("Failed to load image.")
 
-    with col1:
-         st.write("chat")
-
-    with col3:
-         st.write("hi")
+   
 
 
 
@@ -497,20 +493,27 @@ try:
        
     #--------------------------------------------------------------main function------------------------------------------------------------------#
     def main():
-
-            if uploaded_files:
             
-                query_documents()
+            #columns
 
-            elif url and web_document_name and not uploaded_files:
-                 
-                 query_web()
+            column1,column2,column3,column4 = st.columns(4)
 
-
-            else:
+            with column1:
+                
                 chat_with_42()
 
-        
+            with column2:
+                 
+                 if uploaded_files:
+                      query_documents()
+
+            with column3:
+                 
+                if url and web_document_name:
+                     
+                     query_web()
+
+
     #call main
     main()
 
