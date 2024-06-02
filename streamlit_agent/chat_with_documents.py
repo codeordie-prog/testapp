@@ -531,7 +531,7 @@ try:
             )
 
             llm_model = st.sidebar.selectbox("Choose LLM model", ("gpt-4", "gpt-4o"))
-            llm = ChatOpenAI(model_name=llm_model)
+            llm = ChatOpenAI(model_name=llm_model,openai_api_key = openai_api_key)
 
             # Prompt
             prompt_retriever = ChatPromptTemplate.from_messages(
