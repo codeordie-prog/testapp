@@ -505,11 +505,15 @@ try:
 
         if sidebar_option == "Chat":
             
-            chat_with_42()
-
-        elif sidebar_option =="Query documents":
-             if uploaded_files:
+            if uploaded_files and not url and not web_document_name:
                 query_documents()
+
+            elif not uploaded_files and not url and not web_document_name:
+
+                chat_with_42()
+            else:
+                 query_web()
+
     
 
         
