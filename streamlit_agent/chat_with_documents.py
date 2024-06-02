@@ -589,6 +589,10 @@ try:
                 else:
                     query_web()
 
+            elif sidebar_option == "Github":
+                 url = st.text_input("Enter github url")
+                 github_repo_query(url)
+
         except Exception as e:
              st.write("An error was encountered at main call",e)
     
