@@ -494,17 +494,20 @@ try:
     #--------------------------------------------------------------main function------------------------------------------------------------------#
     def main():
             
-        if uploaded_files:
-            
-                query_documents()
+        tab1, tab2, tab3, tab4, tab5 = st.tabs(["Chat", "Document query", "web query", "Github Repo", "Test Cases"])
 
-        elif url and web_document_name and not uploaded_files:
-                 
-            query_web()
+        with tab1:
+            if uploaded_files:
+                
+                    query_documents()
+
+            elif url and web_document_name and not uploaded_files:
+                    
+                query_web()
 
 
-        else:
-            chat_with_42()
+            else:
+                chat_with_42()
 
     #call main
     main()
