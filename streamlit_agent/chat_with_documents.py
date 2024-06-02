@@ -499,14 +499,16 @@ try:
         with tab1:
            
             if uploaded_files:
+            
                 query_documents()
 
             elif url and web_document_name and not uploaded_files:
-                query_web()
-            
-            else:
-                 chat_with_42()
+                 
+                 query_web()
 
+
+            else:
+                chat_with_42()
 
        
 
