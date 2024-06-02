@@ -496,7 +496,7 @@ try:
             
             #columns
 
-            column1,column2,column3,column4 = st.columns(4)
+            column1,column2,column3,column4 = st.columns([2,1,1,1])
 
             with column1:
                 
