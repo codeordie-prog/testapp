@@ -504,8 +504,13 @@ try:
     def main():
 
         if sidebar_option == "Chat":
-            st.title("Chat with 42")
+            
             chat_with_42()
+
+        elif sidebar_option =="Query documents":
+             
+             query_documents()
+    
 
         
     #call main
