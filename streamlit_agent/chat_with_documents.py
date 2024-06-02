@@ -62,7 +62,7 @@ try:
     image_bytes = load_image(imag_path)
 
     # Create two columns
-    col1, col2,col3= st.columns([1, 2, 1])
+    col1, col2,col3,col4= st.columns([1,2,1,1])
 
     #Display the image in the center column
     with col2:
@@ -70,6 +70,12 @@ try:
          st.image(io.BytesIO(image_bytes), width=400)
         else:
          st.error("Failed to load image.")
+
+    with col1:
+         st.write("chat")
+
+    with col3:
+         st.write("hi")
 
 
 
