@@ -494,7 +494,9 @@ try:
 
                         qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
 
-
+    #define repo query
+    def github_repo_query(github_repo_url: str):
+         return None
 
 
 
@@ -503,17 +505,21 @@ try:
     #--------------------------------------------------------------main function------------------------------------------------------------------#
     def main():
 
-        if sidebar_option == "Chat":
-            
-            if uploaded_files and not url and not web_document_name:
-                query_documents()
+        try:
 
-            elif not uploaded_files and not url and not web_document_name:
+            if sidebar_option == "Chat and query":
+                
+                if uploaded_files and not url and not web_document_name:
+                    query_documents()
 
-                chat_with_42()
-            else:
-                 query_web()
+                elif not uploaded_files and not url and not web_document_name:
 
+                    chat_with_42()
+                else:
+                    query_web()
+
+        except Exception as e:
+             st.write("An error was encountered at main call",e)
     
 
         
