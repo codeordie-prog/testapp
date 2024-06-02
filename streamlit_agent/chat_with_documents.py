@@ -14,7 +14,7 @@ from langchain.embeddings import HuggingFaceEmbeddings
 from langchain.callbacks.base import BaseCallbackHandler
 from langchain.chains import ConversationalRetrievalChain,RetrievalQA
 from langchain.vectorstores import DocArrayInMemorySearch, Chroma
-from langchain.text_splitter import RecursiveCharacterTextSplitter,CharacterTextSplitter
+from langchain.text_splitter import RecursiveCharacterTextSplitter,CharacterTextSplitter,Language
 from langchain.chains import LLMChain
 from langchain_core.prompts import HumanMessagePromptTemplate,ChatPromptTemplate,MessagesPlaceholder,PromptTemplate
 from langchain_core.messages import AIMessage, HumanMessage,SystemMessage
@@ -25,7 +25,6 @@ from lxml import html
 from git import Repo
 from langchain_community.document_loaders.generic import GenericLoader
 from langchain_community.document_loaders.parsers import LanguageParser
-from langchain_text_splitters import Language
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 
