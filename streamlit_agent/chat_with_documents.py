@@ -508,8 +508,8 @@ try:
             chat_with_42()
 
         elif sidebar_option =="Query documents":
-             
-             query_documents()
+             if uploaded_files:
+                query_documents()
     
 
         
