@@ -62,7 +62,7 @@ try:
     image_bytes = load_image(imag_path)
 
     # Create two columns
-    col1, col2,col3,col4= st.columns([1,2,1,1])
+    col1, col2,col3,= st.columns([1,2,1])
 
     #Display the image in the center column
     with col2:
@@ -84,6 +84,15 @@ try:
         is a smart bot that utilizes Retrieval Augmented Generation to query uploaded documents in the format `.pdf`,`.csv` and `.txt`.
         42 also has a chat section where users can chat with the bot without uploading the documents.
     """)
+
+
+
+    #____________________________________________________________radios_______________________________________________________________________
+
+    sidebar_option = st.sidebar.radio(
+         "Select an option",
+         ("Chat","Query document","Query url","Github")
+    )
 
     #--------------------------------------------------sidebar instructions section-------------------------------------------------------------#
 
