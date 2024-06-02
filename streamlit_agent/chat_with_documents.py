@@ -502,73 +502,66 @@ try:
 
     #define repo query
     def github_repo_query(github_repo_url: str):
-         
-         #temp storage path
-        temp_dir = tempfile.TemporaryDirectory()
+        with tempfile.TemporaryDirectory() as temp_dir:
+            # Clone the repo
+            repo_path = os.path.join(temp_dir, "repo")
+            repo = Repo.clone_from(github_repo_url, to_path=repo_path)
 
-        #clone the repo
-        repo = Repo.clone_from(github_repo_url,to_path=temp_dir)
-
-        #load
-        loader = GenericLoader.from_filesystem(
-                temp_dir + "/libs/core/langchain_core",
+            # Load
+            loader = GenericLoader.from_filesystem(
+                repo_path,
                 glob="**/*",
                 suffixes=[".py"],
                 exclude=["**/non-utf8-encoding.py"],
                 parser=LanguageParser(language=Language.PYTHON, parser_threshold=500),
             )
-        documents = loader.load()
+            documents = loader.load()
 
-        #split
-        python_splitter = RecursiveCharacterTextSplitter.from_language(
-            language=Language.PYTHON, chunk_size=2000, chunk_overlap=200
-        )
+            # Split
+            python_splitter = RecursiveCharacterTextSplitter.from_language(
+                language=Language.PYTHON, chunk_size=2000, chunk_overlap=200
+            )
+            texts = python_splitter.split_documents(documents)
 
-        texts = python_splitter.split_documents(documents)
+            # Retriever
+            db = Chroma.from_documents(texts, OpenAIEmbeddings(disallowed_special=()))
+            retriever = db.as_retriever(
+                search_type="mmr",  # Also test "similarity"
+                search_kwargs={"k": 8},
+            )
 
-        #retriever
-        db = Chroma.from_documents(texts, OpenAIEmbeddings(disallowed_special=()))
-        retriever = db.as_retriever(
-            search_type="mmr",  # Also test "similarity"
-            search_kwargs={"k": 8},
-        )
+            llm_model = st.sidebar.selectbox("Choose LLM model", ("gpt-4", "gpt-4o"))
+            llm = ChatOpenAI(model_name=llm_model)
 
-        llm_model = st.sidebar.selectbox("Choose LLM model",
-                                        ("gpt-4","gpt-4o"))
+            # Prompt
+            prompt_retriever = ChatPromptTemplate.from_messages(
+                [
+                    ("placeholder", "{chat_history}"),
+                    ("user", "{input}"),
+                    (
+                        "user",
+                        "Given the above conversation, generate a search query to look up to get information relevant to the conversation",
+                    ),
+                ]
+            )
 
-        llm = ChatOpenAI(model_name = llm_model)
+            retriever_chain = create_history_aware_retriever(llm, retriever, prompt_retriever)
 
-        #prompt
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                ("placeholder", "{chat_history}"),
-                ("user", "{input}"),
-                (
-                    "user",
-                    "Given the above conversation, generate a search query to look up to get information relevant to the conversation",
-                ),
-            ]
-        )
+            prompt_document = ChatPromptTemplate.from_messages(
+                [
+                    (
+                        "system",
+                        "Answer the user's questions based on the below context:\n\n{context}",
+                    ),
+                    ("placeholder", "{chat_history}"),
+                    ("user", "{input}"),
+                ]
+            )
+            document_chain = create_stuff_documents_chain(llm, prompt_document)
 
-        retriever_chain = create_history_aware_retriever(llm, retriever, prompt)
+            qa = create_retrieval_chain(retriever_chain, document_chain)
 
-        prompt = ChatPromptTemplate.from_messages(
-            [
-                (
-                    "system",
-                    "Answer the user's questions based on the below context:\n\n{context}",
-                ),
-                ("placeholder", "{chat_history}"),
-                ("user", "{input}"),
-            ]
-        )
-        document_chain = create_stuff_documents_chain(llm, prompt)
-
-        qa = create_retrieval_chain(retriever_chain, document_chain)
-
-        return qa
-
-
+            return qa
 
 
 
