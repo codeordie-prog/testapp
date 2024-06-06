@@ -503,7 +503,7 @@ try:
 
         try:
 
-            if uploaded_files and not url and not web_document_name:
+            if uploaded_files:
                 query_documents()
 
             elif url and web_document_name:
