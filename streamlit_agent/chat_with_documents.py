@@ -325,6 +325,7 @@ try:
                     st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
 
                     buffer =BytesIO()
+                    file_name = "myfile.txt"
 
 
                     # Download chat button
