@@ -450,49 +450,50 @@ try:
             if not url and web_document_name:
                 st.info("Please add url to continue.")
                 st.stop()
-                
-            retriever = web_page_saver_to_txt(url)
 
-            # Setup memory for contextual conversation for the documents part
-            msgs = StreamlitChatMessageHistory()
-            memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
+            if not None:   
+                retriever = web_page_saver_to_txt(url)
 
-            llm_model = st.sidebar.selectbox("Choose LLM model",
-                                        ("gpt-3.5-turbo","gpt-4","gpt-4o"))
-                
-                
-                # Setup LLM and QA chain for the documents part
-            llm = ChatOpenAI(
-                    model_name=llm_model, openai_api_key=openai_api_key, temperature=0, streaming=True
-                )
+                # Setup memory for contextual conversation for the documents part
+                msgs = StreamlitChatMessageHistory()
+                memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
+
+                llm_model = st.sidebar.selectbox("Choose LLM model",
+                                            ("gpt-3.5-turbo","gpt-4","gpt-4o"))
+                    
+                    
+                    # Setup LLM and QA chain for the documents part
+                llm = ChatOpenAI(
+                        model_name=llm_model, openai_api_key=openai_api_key, temperature=0, streaming=True
+                    )
 
 
-            qa_chain = ConversationalRetrievalChain.from_llm(
-                    llm, 
-                    retriever=retriever, 
-                    memory=memory, 
-                    verbose=True
-                )
+                qa_chain = ConversationalRetrievalChain.from_llm(
+                        llm, 
+                        retriever=retriever, 
+                        memory=memory, 
+                        verbose=True
+                    )
 
-                
+                    
 
-            if len(msgs.messages) == 0 or st.sidebar.button("Clear message history"):
-                    msgs.clear()
-                    msgs.add_ai_message("Hey carbon entity, Want to query your documents? ask me!")
+                if len(msgs.messages) == 0 or st.sidebar.button("Clear message history"):
+                        msgs.clear()
+                        msgs.add_ai_message("Hey carbon entity, Want to query your documents? ask me!")
 
-            avatars = {"human": "user", "ai": "assistant"}
-            for msg in msgs.messages:
-                st.chat_message(avatars[msg.type]).write(msg.content)
-                
-            st.markdown("Document query section. Utilize RAG you curious being.")
-            if user_query := st.chat_input(placeholder="Ask me about  your documents!"):
-                st.chat_message("user").write(user_query)
+                avatars = {"human": "user", "ai": "assistant"}
+                for msg in msgs.messages:
+                    st.chat_message(avatars[msg.type]).write(msg.content)
+                    
+                st.markdown("Document query section. Utilize RAG you curious being.")
+                if user_query := st.chat_input(placeholder="Ask me about  your documents!"):
+                    st.chat_message("user").write(user_query)
 
-                with st.chat_message("ai"):
-                        retrieval_handler = PrintRetrievalHandler(st.container())
-                        stream_handler = StreamHandler(st.empty())
+                    with st.chat_message("ai"):
+                            retrieval_handler = PrintRetrievalHandler(st.container())
+                            stream_handler = StreamHandler(st.empty())
 
-                        qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
+                            qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
 
     
 
