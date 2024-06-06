@@ -347,8 +347,8 @@ try:
                     # Append assistant message to session state and display it
                     st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
 
-                    # Download chat button
-                    if st.sidebar.button("Download Chat"):
+                # Download chat button
+                if st.sidebar.button("Download Chat"):
                         buffer = BytesIO()
                         all_messages = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
                         buffer.write(all_messages.encode("utf-8"))
