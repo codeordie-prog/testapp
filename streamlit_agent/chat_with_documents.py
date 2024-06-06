@@ -1,7 +1,7 @@
 import os,io
 import tempfile
 import streamlit as st
-from io import BytesIO
+from io import BytesIO,StringIO
 from openai import OpenAI
 from langchain_openai import OpenAIEmbeddings
 from langchain.chat_models import ChatOpenAI
@@ -249,7 +249,7 @@ try:
     def create_and_download(text_content):
             """Generates a text file in memory and offers a download button."""
             # Create a BytesIO object to store the content
-            buffer = BytesIO()
+            buffer = StringIO()
 
             # Write the content to the buffer
             if isinstance(text_content, bytes):
