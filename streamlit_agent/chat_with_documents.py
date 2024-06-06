@@ -330,7 +330,8 @@ try:
 
     def download_chat_history():
          buffer = BytesIO()
-         all_messages = "\n".join([f"{msg['role']}:{msg['content']}"] for msg in st.session_state['messages'])
+         all_messages = "\n".join([f"{msg['role']}:{msg['content']}" for msg in st.session_state['messages']])
+         
          buffer.write(all_messages.encode('utf-8'))
          buffer.seek(0)
          file_name = "myfile.txt"
