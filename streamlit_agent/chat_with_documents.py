@@ -324,24 +324,26 @@ try:
                     # Append assistant message to session state and display it
                     st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
 
-                
+                    return "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
 
+            except Exception as e:
+                st.write("an Error occured please enter a valid OpenAI API key",e)
 
-                    # Download chat button
-                    if download_button:
-                        buffer =BytesIO()
-                        all_messages = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
-                        buffer.write(all_messages.encode("utf-8"))
-                        buffer.seek(0)
-                        file_name = "my_file.txt"
-                        st.download_button(
-                             label = 'Download txt',
-                             mime= "text/plain",
-                             buffer = buffer,
-                             file_name=file_name
-                        )
-            except Exception:
-                st.write("an Error occured please enter a valid OpenAI API key")
+    def download_chat(all_messages):
+         
+         buffer = BytesIO()
+         messages = all_messages.encode("utf-8")
+         buffer.write(messages)
+         buffer.seek(0)
+         file_name ="chat_history.txt"
+         st.sidebar.button(
+              label='download txt',
+              mime = 'text/plain',
+              data = buffer,
+              file_name=file_name,
+              
+         )
+
 
     #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
     #query website function
@@ -501,7 +503,9 @@ try:
                  query_web()
         
             else:
-                 chat_with_42()
+                 messages = chat_with_42()
+
+                 download_chat(messages)
            
 
         except Exception as e:
