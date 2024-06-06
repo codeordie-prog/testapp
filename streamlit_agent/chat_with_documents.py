@@ -450,24 +450,23 @@ try:
             if not url and web_document_name:
                 st.info("Please add url to continue.")
                 st.stop()
-
-            if not None:   
-                retriever = web_page_saver_to_txt(url)
+   
+            retriever = web_page_saver_to_txt(url)
 
                 # Setup memory for contextual conversation for the documents part
-                msgs = StreamlitChatMessageHistory()
-                memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
+            msgs = StreamlitChatMessageHistory()
+            memory = ConversationBufferMemory(memory_key="chat_history", chat_memory=msgs, return_messages=True)
 
-                llm_model = st.sidebar.selectbox("Choose LLM model",
+            llm_model = st.sidebar.selectbox("Choose LLM model",
                                             ("gpt-3.5-turbo","gpt-4","gpt-4o"))
                     
                     
                     # Setup LLM and QA chain for the documents part
-                llm = ChatOpenAI(
+            llm = ChatOpenAI(
                         model_name=llm_model, openai_api_key=openai_api_key, temperature=0, streaming=True
                     )
 
-
+            if retriever is not None:
                 qa_chain = ConversationalRetrievalChain.from_llm(
                         llm, 
                         retriever=retriever, 
