@@ -93,7 +93,7 @@ try:
 
 
     #____________________________________________________________radios_______________________________________________________________________
-
+    download_button = st.sidebar.button("Download_chat")
     #--------------------------------------------------sidebar instructions section-------------------------------------------------------------#
 
     st.sidebar.subheader("Get an openAI API key")
@@ -324,17 +324,16 @@ try:
                     # Append assistant message to session state and display it
                     st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
 
-                    buffer =BytesIO()
-                    file_name = "myfile.txt"
+                
 
 
                     # Download chat button
-                    if st.sidebar.button("Download Chat"):
-                        
+                    if download_button:
+                        buffer =BytesIO()
                         all_messages = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
                         buffer.write(all_messages.encode("utf-8"))
                         buffer.seek(0)
-                        file_name = st.text_input("enter filename")
+                        file_name = "my_file.txt"
                         st.download_button(
                              label = 'Download txt',
                              mime= "text/plain",
