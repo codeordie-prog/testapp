@@ -349,9 +349,11 @@ try:
 
                     # Download chat button
                     if st.sidebar.button("Download Chat"):
+                        buffer = BytesIO()
                         all_messages = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
+                        buffer.write(all_messages.encode("utf-8"))
+                        buffer.seek()
                         file_name = st.text_input("enter filename")
-                        buffer = create_and_download(text_content=all_messages)
                         st.download_button(
                              label = 'Download txt',
                              mime= "text/plain",
