@@ -571,17 +571,14 @@ try:
 
         try:
 
-            if sidebar_option == "Chat and query":
-                
-                if uploaded_files and not url and not web_document_name:
-                    query_documents()
+            if uploaded_files:
+                query_documents()
 
-                elif not uploaded_files and not url and not web_document_name:
+            elif url and web_document_name and not uploaded_files:
+                 query_web()
 
-                    chat_with_42()
-                else:
-                    query_web()
-
+            else:
+                 chat_with_42()
            
 
         except Exception as e:
