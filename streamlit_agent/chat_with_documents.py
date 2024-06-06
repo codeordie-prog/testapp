@@ -291,7 +291,7 @@ try:
                         st.info("Please add your OpenAI API key to continue.")
                         st.stop()
 
-                    # Initialize OpenAI LLMm
+                    # Initialize OpenAI LLMf
                     llm2 = ChatOpenAI(openai_api_key=openai_api_key, model = llm_model, streaming = True)
 
                     # Initialize Streamlit chat history
