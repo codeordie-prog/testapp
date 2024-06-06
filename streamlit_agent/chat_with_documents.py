@@ -338,7 +338,7 @@ try:
          st.sidebar.button(
               label="download chat",
               data = buffer,
-              file_name = file_name,
+              file_name = "chat_history.txt",
               mime = "text/plain"
          )
               
