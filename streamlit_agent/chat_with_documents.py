@@ -94,12 +94,7 @@ try:
 
 
     #____________________________________________________________radios_______________________________________________________________________
-
-    sidebar_option = st.sidebar.radio(
-         "Select an option",
-         ("Chat and query","Github")
-    )
-
+\
     #--------------------------------------------------sidebar instructions section-------------------------------------------------------------#
 
     st.sidebar.subheader("Get an openAI API key")
