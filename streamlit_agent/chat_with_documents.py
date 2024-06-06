@@ -249,7 +249,7 @@ try:
     def create_and_download(text_content):
             """Generates a text file in memory and offers a download button."""
             # Create a BytesIO object to store the content
-            buffer = StringIO()
+            buffer = BytesIO()
 
             # Write the content to the buffer
             if isinstance(text_content, bytes):
