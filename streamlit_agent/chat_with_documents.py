@@ -494,69 +494,7 @@ try:
 
                         qa_chain.run(user_query, callbacks=[retrieval_handler, stream_handler])
 
-    #define repo query
-    def github_repo_query(github_repo_url: str, openai_api):
-        with tempfile.TemporaryDirectory() as temp_dir:
-            # Clone the repo
-            repo_path = os.path.join(temp_dir, "repo")
-            repo = Repo.clone_from(github_repo_url, to_path=repo_path)
-
-            # Load
-            loader = GenericLoader.from_filesystem(
-                repo_path,
-                glob="**/*",
-                suffixes=[".py"],
-                exclude=["**/non-utf8-encoding.py"],
-                parser=LanguageParser(language=Language.PYTHON, parser_threshold=500),
-            )
-            documents = loader.load()
-
-            # Split
-            python_splitter = RecursiveCharacterTextSplitter.from_language(
-                language=Language.PYTHON, chunk_size=2000, chunk_overlap=200
-            )
-            texts = python_splitter.split_documents(documents)
-
-            # Retriever
-            db = Chroma.from_documents(texts, OpenAIEmbeddings(disallowed_special=(),api_key=openai_api))
-            retriever = db.as_retriever(
-                search_type="mmr",  # Also test "similarity"
-                search_kwargs={"k": 8},
-            )
-
-            llm_model = st.sidebar.selectbox("Choose LLM model", ("gpt-4", "gpt-4o"))
-            llm = ChatOpenAI(model_name=llm_model,openai_api_key = openai_api)
-
-            # Prompt
-            prompt_retriever = ChatPromptTemplate.from_messages(
-                [
-                    ("placeholder", "{chat_history}"),
-                    ("user", "{input}"),
-                    (
-                        "user",
-                        "Given the above conversation, generate a search query to look up to get information relevant to the conversation",
-                    ),
-                ]
-            )
-
-            retriever_chain = create_history_aware_retriever(llm, retriever, prompt_retriever)
-
-            prompt_document = ChatPromptTemplate.from_messages(
-                [
-                    (
-                        "system",
-                        "Answer the user's questions based on the below context:\n\n{context}",
-                    ),
-                    ("placeholder", "{chat_history}"),
-                    ("user", "{input}"),
-                ]
-            )
-            document_chain = create_stuff_documents_chain(llm, prompt_document)
-
-            qa = create_retrieval_chain(retriever_chain, document_chain)
-
-            return qa
-
+    
 
 
        
