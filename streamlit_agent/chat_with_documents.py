@@ -328,19 +328,19 @@ try:
             except Exception as e:
                 st.write("an Error occured please enter a valid OpenAI API key",e)
 
-    def download_chat():
-        buffer = BytesIO()
-        all_messages = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
-        buffer.write(all_messages.encode("utf-8"))
-        buffer.seek(0)
-        file_name = "chat_history.txt"
-        st.sidebar.download_button(
-            label="Download Chat History",
-            data=buffer,
-            file_name=file_name,
-            mime="text/plain"
-        )
-
+    def download_chat_history():
+         buffer = BytesIO()
+         all_messages = "\n".join([f"{msg['role']}:{msg['content']}"] for msg in st.session_state['messages'])
+         buffer.write(all_messages.encode('utf-8'))
+         buffer.seek(0)
+         file_name = "myfile.txt"
+         st.sidebar.button(
+              label="download chat",
+              data = buffer,
+              file_name = file_name,
+              mime = "text/plain"
+         )
+              
 
     #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
     #query website function
