@@ -54,7 +54,6 @@ st.set_page_config(
 
 
 #----------------------------------------------------- Load the image function-----------------------------------------------------#
-
 try:
     def load_image(image_path):
         try:
@@ -94,7 +93,7 @@ try:
 
 
     #____________________________________________________________radios_______________________________________________________________________
-\
+
     #--------------------------------------------------sidebar instructions section-------------------------------------------------------------#
 
     st.sidebar.subheader("Get an openAI API key")
@@ -566,10 +565,10 @@ try:
 
         try:
 
-            if uploaded_files:
+            if uploaded_files and not url and not web_document_name:
                 query_documents()
 
-            elif url and web_document_name and not uploaded_files:
+            elif url and web_document_name:
                  query_web()
 
             else:
