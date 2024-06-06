@@ -266,6 +266,8 @@ try:
                 file_name="my_text_file.txt",
                 mime="text/plain"
             )
+
+            return buffer
         
     #-------------------------------------------------------------chat setup section---------------------------------------------------------#
 
@@ -348,7 +350,14 @@ try:
                     # Download chat button
                     if st.sidebar.button("Download Chat"):
                         all_messages = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
-                        create_and_download(text_content=all_messages)
+                        file_name = st.text_input("enter filename")
+                        buffer = create_and_download(text_content=all_messages)
+                        st.download_button(
+                             label = 'Download txt',
+                             mime= "text/plain",
+                             buffer = buffer,
+                             file_name=file_name
+                        )
             except Exception:
                 st.write("an Error occured please enter a valid OpenAI API key")
 
