@@ -335,7 +335,7 @@ try:
          buffer.write(all_messages.encode('utf-8'))
          buffer.seek(0)
          file_name = "myfile.txt"
-         st.sidebar.button(
+         st.sidebar.download_button(
               label="download chat",
               data = buffer,
               file_name = "chat_history.txt",
