@@ -502,7 +502,7 @@ try:
             else:
                  chat_with_42()
 
-            download_chat()
+            download_chat_history()
            
 
         except Exception as e:
