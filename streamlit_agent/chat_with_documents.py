@@ -245,30 +245,7 @@ try:
     #---------------------------------------------define download txt function-------------------------------------------------------------------#
 
     #function-3
-    #define download txt
-    def create_and_download(text_content):
-            """Generates a text file in memory and offers a download button."""
-            # Create a BytesIO object to store the content
-            buffer = BytesIO()
-
-            # Write the content to the buffer
-            if isinstance(text_content, bytes):
-                buffer.write(text_content)
-            else:
-                buffer.write(text_content.encode('utf-8'))
-
-            buffer.seek(0)
-
-            # Provide download button
-            st.download_button(
-                label="Download Text File",
-                data=buffer,
-                file_name="my_text_file.txt",
-                mime="text/plain"
-            )
-
-            return buffer
-        
+    
     #-------------------------------------------------------------chat setup section---------------------------------------------------------#
 
     #function-4 chat session
@@ -347,12 +324,15 @@ try:
                     # Append assistant message to session state and display it
                     st.session_state["messages"].append({"role": "assistant", "content": assistant_msg})
 
+                    buffer =BytesIO()
+
+
                     # Download chat button
                     if st.sidebar.button("Download Chat"):
-                        buffer = BytesIO()
+                        
                         all_messages = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
                         buffer.write(all_messages.encode("utf-8"))
-                        buffer.seek()
+                        buffer.seek(0)
                         file_name = st.text_input("enter filename")
                         st.download_button(
                              label = 'Download txt',
@@ -519,7 +499,7 @@ try:
 
             elif url and web_document_name:
                  query_web()
-
+        
             else:
                  chat_with_42()
            
