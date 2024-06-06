@@ -93,7 +93,7 @@ try:
 
 
     #____________________________________________________________radios_______________________________________________________________________
-    download_button = st.sidebar.button("Download_chat")
+
     #--------------------------------------------------sidebar instructions section-------------------------------------------------------------#
 
     st.sidebar.subheader("Get an openAI API key")
@@ -329,20 +329,17 @@ try:
                 st.write("an Error occured please enter a valid OpenAI API key",e)
 
     def download_chat():
-         
-         buffer = BytesIO()
-         all_messages = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
-
-         buffer.write(all_messages.encode("utf-8"))
-         buffer.seek(0)
-         file_name ="chat_history.txt"
-         st.sidebar.button(
-              label='download txt',
-              mime = 'text/plain',
-              data = buffer,
-              file_name=file_name,
-              
-         )
+        buffer = BytesIO()
+        all_messages = "\n".join([f"{msg['role']}: {msg['content']}" for msg in st.session_state["messages"]])
+        buffer.write(all_messages.encode("utf-8"))
+        buffer.seek(0)
+        file_name = "chat_history.txt"
+        st.sidebar.download_button(
+            label="Download Chat History",
+            data=buffer,
+            file_name=file_name,
+            mime="text/plain"
+        )
 
 
     #---------------------------------------------------------RAG setup section------------------------------------------------------------------#
